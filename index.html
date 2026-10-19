@@ -1,0 +1,2705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'none';
+  script-src 'self' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data:;
+  manifest-src 'self';
+  worker-src 'self';
+  connect-src 'self' https://script.google.com https://script.googleusercontent.com;
+  form-action 'none';
+  base-uri 'none';
+  object-src 'none';
+  frame-src 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#a3121b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Admin Hub">
+<meta name="description" content="Saks High School Admin Hub: classroom walkthroughs aligned to the Alabama Teacher Observation Tool, and a daily time log by category. A local tool, not affiliated with or endorsed by ALSDE.">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<title>Saks Admin Hub</title>
+<style>
+:root{
+  --bg:#f5f4f2; --card:#ffffff; --ink:#16181d; --muted:#5f636c; --faint:#8d929c;
+  --brand:#a3121b; --brand-soft:#fbeaeb; --brand-ink:#a3121b;
+  --line:#e5e4e1; --radius:14px;
+  --series-1:#2a78d6;              /* data mark — validated vs #ffffff */
+  --grid:#e1e0d9; --baseline:#c3c2b7;
+  --good:#0ca30c; --warn:#b45309; --warn-soft:#fdf3e3; --bad:#c0392f; --bad-soft:#fdecea;
+  --shadow:0 1px 2px rgba(16,18,29,.06),0 4px 14px rgba(16,18,29,.05);
+  --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0f1115; --card:#191c22; --ink:#e9eaee; --muted:#9aa0aa; --faint:#6d737d;
+    --brand:#e0606a; --brand-soft:#2c1617; --brand-ink:#5c0a10;
+    --line:#282c34;
+    --series-1:#3987e5;            /* data mark — validated vs #191c22 */
+    --grid:#2c2c2a; --baseline:#383835;
+    --good:#0ca30c; --warn:#e0a458; --warn-soft:#33260f; --bad:#e07068; --bad-soft:#331a18;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25);
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);
+  font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  padding-bottom:calc(64px + var(--safe-b));overscroll-behavior-y:contain}
+h1,h2,h3,h4{margin:0;font-weight:650;letter-spacing:-.01em}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--series-1);text-decoration:none}
+
+header.top{position:sticky;top:0;z-index:40;background:var(--brand-ink);color:#fff;
+  padding:calc(var(--safe-t) + 13px) 15px 13px;display:flex;align-items:center;gap:11px}
+header.top .ttl{font-size:18px;font-weight:650;letter-spacing:-.02em;flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+header.top .sub{font-size:11.5px;font-weight:400;opacity:.78;display:block;margin-top:1px}
+header.top button{background:rgba(255,255,255,.15);border:0;color:#fff;border-radius:9px;
+  padding:8px 12px;font-size:14px;font-weight:600;cursor:pointer}
+.back{background:none!important;padding:8px 4px 8px 0!important;font-size:22px!important;line-height:1}
+main{padding:14px 15px 22px;max-width:820px;margin:0 auto}
+
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:50;
+  background:color-mix(in srgb,var(--card) 93%,transparent);
+  backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);
+  border-top:1px solid var(--line);display:flex;padding-bottom:var(--safe-b)}
+nav.tabs a{flex:1;text-align:center;padding:8px 2px 7px;color:var(--faint);
+  font-size:10px;font-weight:600;display:block}
+nav.tabs a .ic{display:block;font-size:19px;line-height:1.3}
+nav.tabs a.on{color:var(--brand)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:13px;box-shadow:var(--shadow);margin-bottom:11px}
+.card.tap{cursor:pointer}
+.card.tap:active{transform:scale(.99)}
+.sect{margin:20px 0 8px;font-size:11.5px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--faint)}
+.sect:first-child{margin-top:0}
+.row{display:flex;align-items:center;gap:11px}
+.row.between{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.muted{color:var(--muted)}
+.tiny{font-size:12.5px}.mini{font-size:11.5px}
+.trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.empty{text-align:center;color:var(--muted);padding:30px 16px;font-size:14px}
+.empty .big{font-size:32px;display:block;margin-bottom:8px;opacity:.45}
+.hr{height:1px;background:var(--line);margin:11px -13px}
+
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11px;
+  font-weight:650;background:var(--brand-soft);color:var(--brand);white-space:nowrap}
+.pill.flat{background:var(--bg);color:var(--muted)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.ok{background:color-mix(in srgb,var(--good) 14%,transparent);color:var(--good)}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:11px 8px;text-align:center;box-shadow:var(--shadow)}
+.stat .n{font-size:22px;font-weight:700;letter-spacing:-.03em;line-height:1.15}
+.stat .l{font-size:10px;color:var(--muted);margin-top:2px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.04em}
+
+label.f{display:block;margin-bottom:12px}
+label.f > span{display:block;font-size:12.5px;font-weight:650;color:var(--muted);margin-bottom:5px}
+input[type=text],input[type=date],input[type=number],input[type=url],input[type=password],
+select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;
+  background:var(--bg);outline:none;font-size:16px}
+textarea{resize:vertical;min-height:74px;line-height:1.5}
+input:focus,select:focus,textarea:focus{border-color:var(--brand);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 15%,transparent)}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),
+  linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 17px) 50%,calc(100% - 12px) 50%;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:34px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 15px;
+  border-radius:11px;border:1px solid var(--line);background:var(--card);
+  font-weight:600;font-size:15px;cursor:pointer;text-align:center}
+.btn:active{transform:scale(.985)}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.dan{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 35%,var(--line))}
+.btn.full{display:flex;width:100%}
+.btn.sm{padding:8px 11px;font-size:13.5px;border-radius:9px}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.btnrow{display:flex;gap:8px}
+.btnrow > *{flex:1}
+
+/* section chips inside capture */
+.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch}
+.chips::-webkit-scrollbar{display:none}
+.chips button{white-space:nowrap;background:var(--card);border:1px solid var(--line);
+  border-radius:999px;padding:8px 13px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted)}
+.chips button.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.chips button .dot{display:inline-block;width:6px;height:6px;border-radius:99px;
+  background:var(--series-1);margin-left:5px;vertical-align:middle}
+
+.timer{background:var(--brand-ink);color:#fff;border-radius:var(--radius);padding:13px 15px;
+  margin-bottom:11px;display:flex;align-items:center;gap:12px}
+.timer .clock{font-size:27px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.timer button{background:rgba(255,255,255,.17);border:0;color:#fff;border-radius:9px;
+  padding:9px 12px;font-weight:600;cursor:pointer;font-size:13.5px}
+
+/* indicator rating rows */
+.dim{margin-bottom:11px}
+.dimhead{display:flex;align-items:center;gap:9px;padding:11px 13px;background:var(--card);
+  border:1px solid var(--line);border-radius:var(--radius);cursor:pointer;box-shadow:var(--shadow)}
+.dimhead.open{border-radius:var(--radius) var(--radius) 0 0;border-bottom-color:transparent}
+.dimhead .nm{flex:1;font-weight:650;font-size:14.5px}
+.dimhead .ct{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.dimhead .car{color:var(--faint);font-size:15px}
+.dimbody{border:1px solid var(--line);border-top:0;border-radius:0 0 var(--radius) var(--radius);
+  background:var(--card);padding:0 13px 6px;box-shadow:var(--shadow)}
+.ind{padding:11px 0;border-bottom:1px solid var(--line)}
+.ind:last-child{border-bottom:0}
+.ind .q{font-size:14px;line-height:1.4;margin-bottom:9px}
+.ind .q b{font-weight:700;color:var(--muted);font-size:11.5px;letter-spacing:.03em}
+.scale{display:flex;gap:5px}
+.scale button{flex:1;padding:9px 2px;border-radius:9px;border:1px solid var(--line);
+  background:var(--bg);font-weight:700;font-size:14px;cursor:pointer;color:var(--muted)}
+.scale button.na{flex:0 0 44px;font-weight:600;font-size:13px}
+.scale button.on{background:var(--series-1);border-color:var(--series-1);color:#fff}
+.scale button.on.na{background:var(--faint);border-color:var(--faint)}
+.legend{display:flex;flex-wrap:wrap;gap:9px;font-size:11px;color:var(--muted);
+  padding:9px 0 2px;line-height:1.4}
+.legend span b{color:var(--ink)}
+
+/* two-column tallies */
+.tally2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.tcol h4{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);
+  margin-bottom:7px;font-weight:700}
+/* Tally buttons on the Actions screen.
+   NOTE: do NOT name this ".tap" — that collides with ".card.tap" (a tappable
+   card) at equal specificity and silently turns every card into a flex row. */
+.tallybtn{display:flex;align-items:center;gap:7px;width:100%;padding:9px 10px;margin-bottom:6px;
+  border:1px solid var(--line);border-radius:10px;background:var(--card);cursor:pointer;
+  font-size:13px;text-align:left;line-height:1.3}
+.tallybtn.hit{border-color:var(--series-1);background:color-mix(in srgb,var(--series-1) 9%,var(--card))}
+.tallybtn .n{margin-left:auto;font-weight:700;color:var(--series-1);font-variant-numeric:tabular-nums;
+  font-size:13px;flex:none}
+.tallybtn .lb{flex:1;min-width:0}
+
+/* checklists */
+.ck{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid var(--line);
+  cursor:pointer}
+.ck:last-child{border-bottom:0}
+.ck .bx{width:23px;height:23px;border-radius:7px;border:2px solid var(--line);flex:none;
+  display:grid;place-items:center;font-size:13px;color:transparent;font-weight:700}
+.ck.yes .bx{background:var(--good);border-color:var(--good);color:#fff}
+.ck.no .bx{background:var(--bad);border-color:var(--bad);color:#fff}
+.ck .tx{flex:1;font-size:13.5px;line-height:1.35}
+.ck.no .tx{color:var(--bad)}
+
+.note{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.note:last-child{border-bottom:0}
+.note .stamp{font-size:11px;font-weight:700;color:var(--series-1);flex:none;min-width:40px;
+  font-variant-numeric:tabular-nums;padding-top:2px}
+.note .body{flex:1;font-size:13.5px;line-height:1.45;white-space:pre-wrap;word-break:break-word}
+.note .x{color:var(--faint);cursor:pointer;flex:none}
+
+/* charts — single series, one hue, direct labels */
+.bars{margin:2px 0}
+.bar{display:grid;grid-template-columns:118px 1fr 40px;align-items:center;gap:9px;
+  padding:5px 0}
+.bar .lab{font-size:12.5px;color:var(--muted);line-height:1.25}
+.bar .track{height:12px;background:var(--grid);border-radius:4px;overflow:hidden}
+.bar .fill{height:100%;background:var(--series-1);border-radius:4px;min-width:3px}
+.bar .val{font-size:12.5px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.axis{display:grid;grid-template-columns:118px 1fr 40px;gap:9px;font-size:10.5px;
+  color:var(--faint);padding-top:4px;font-variant-numeric:tabular-nums}
+.axis .ticks{display:flex;justify-content:space-between;border-top:1px solid var(--baseline);
+  padding-top:3px}
+
+.scrim{position:fixed;inset:0;background:rgba(10,12,18,.5);z-index:70;display:flex;
+  align-items:flex-end;justify-content:center}
+.sheet{background:var(--card);border-radius:18px 18px 0 0;
+  padding:17px 15px calc(17px + var(--safe-b));width:100%;max-width:560px;max-height:88vh;
+  overflow:auto;animation:up .2s cubic-bezier(.2,.8,.3,1)}
+@keyframes up{from{transform:translateY(26px);opacity:.4}to{transform:none;opacity:1}}
+.sheet h3{margin-bottom:13px;font-size:17px}
+.grab{width:34px;height:4px;border-radius:99px;background:var(--line);margin:-7px auto 13px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(80px + var(--safe-b));
+  background:var(--ink);color:var(--bg);padding:11px 17px;border-radius:11px;font-size:14px;
+  font-weight:600;z-index:90;box-shadow:0 6px 22px rgba(0,0,0,.28);max-width:88vw;text-align:center}
+
+.syncbar{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:11px;
+  font-size:12.5px;font-weight:600;margin-bottom:11px}
+.syncbar.ok{background:color-mix(in srgb,var(--good) 12%,transparent);color:var(--good)}
+.syncbar.pending{background:var(--warn-soft);color:var(--warn)}
+.syncbar.off{background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+
+.warnbox{background:var(--bad-soft);border:1px solid color-mix(in srgb,var(--bad) 30%,transparent);
+  border-radius:11px;padding:11px;margin-bottom:11px}
+.warnbox.soft{background:var(--warn-soft);border-color:color-mix(in srgb,var(--warn) 30%,transparent)}
+.warnbox h4{font-size:13px;margin-bottom:5px;color:var(--bad)}
+.warnbox.soft h4{color:var(--warn)}
+.warnbox ul{margin:0;padding-left:17px;font-size:12.5px;line-height:1.55}
+.warnbox code{background:rgba(0,0,0,.07);padding:1px 5px;border-radius:5px;font-size:12px}
+.ack{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;line-height:1.45;
+  margin:11px 0;cursor:pointer}
+.ack input{width:18px;height:18px;flex:none;margin-top:1px}
+
+table.data{width:100%;border-collapse:collapse;font-size:12.5px}
+table.data th,table.data td{text-align:left;padding:6px 5px;border-bottom:1px solid var(--line)}
+table.data th{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--faint)}
+table.data td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:650}
+
+/* header logo */
+header.top .logo{width:34px;height:34px;border-radius:99px;background:#fff;flex:none;
+  display:block;object-fit:contain;padding:1px}
+
+/* time log */
+.catgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.catbtn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:11px 12px;
+  border:1px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer;
+  text-align:left;box-shadow:var(--shadow);min-height:62px}
+.catbtn:active{transform:scale(.985)}
+.catbtn .cn{font-weight:650;font-size:14px;line-height:1.25}
+.catbtn .cm{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.catbtn.has{border-color:color-mix(in srgb,var(--brand) 45%,var(--line))}
+.catbtn.has .cm{color:var(--brand);font-weight:650}
+.catbtn.wide{grid-column:1 / -1}
+.daynav{display:flex;align-items:center;gap:8px;margin-bottom:11px}
+.daynav button{flex:none;width:42px;height:42px;border-radius:11px;border:1px solid var(--line);
+  background:var(--card);font-size:18px;cursor:pointer}
+.daynav input{flex:1;text-align:center;font-weight:600}
+.entry{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.entry:last-child{border-bottom:0}
+.entry .m{flex:none;min-width:52px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--brand)}
+.entry .b{flex:1;min-width:0}
+.minchips{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 12px}
+.minchips button{border:1px solid var(--line);background:var(--bg);border-radius:999px;
+  padding:7px 12px;font-size:13.5px;font-weight:650;cursor:pointer}
+.big-min{font-size:30px!important;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
+.hint{font-size:12px;color:var(--muted);line-height:1.45;margin:-6px 0 12px}
+
+@media print{nav.tabs,header.top,.noprint{display:none!important}body{padding:0;background:#fff}}
+</style>
+</head>
+<body>
+<header class="top" id="hdr"></header>
+<main id="app"></main>
+<nav class="tabs" id="tabs"></nav>
+
+<script>
+"use strict";
+/* ==============================================================
+   Saks Admin Hub — classroom walkthroughs + principal time log
+
+   Two modules share one app:
+   1. ATOT walkthroughs, with the Saks roster in a dropdown.
+   2. A daily time log in the superintendent's seven categories,
+      exported as a monthly Excel workbook. Finished walkthroughs
+      add their minutes as Instructional Leader time.
+
+   A locally built tool aligned to the Alabama Teacher Observation
+   Tool. Not affiliated with, produced by, or endorsed by the Alabama
+   State Department of Education.
+
+   Structure follows the Alabama Teacher Observation Tool: five
+   dimensions, 23 indicators, rated on the state's 4-point scale.
+   This app is a CAPTURE tool for frequent walkthroughs. Official
+   ATGP observations are entered in the state ATOT platform; this
+   produces the evidence that makes that entry fast and defensible.
+   ============================================================== */
+
+/* ---------- ATOT framework ---------- */
+const ATOT = [
+  { key: "CC", name: "Culture / Climate", short: "Culture",
+    desc: "A learning environment in which each learner is cared for, is safe, has a sense of belonging, and feels secure to share thoughts.",
+    items: [
+      "Fosters an environment that embraces all learners",
+      "Treats each learner equitably",
+      "Encourages learners to share opinions without fear of negative comments",
+      "Creates enthusiasm for the learning at hand" ] },
+  { key: "LR", name: "Learning", short: "Learning",
+    desc: "Processes established to ensure learners have opportunities to demonstrate understanding of content and apply knowledge and skills.",
+    items: [
+      "Communicates clear explanations about activities or tasks",
+      "Implements lessons stimulating higher-order thinking skills",
+      "Delivers lessons relatable to learners or aligned to their interests",
+      "Monitors learners' understanding of content / skill acquisition",
+      "Adapts instruction and activities to meet individual learner needs",
+      "Provides learners purposeful feedback about progress and needs" ] },
+  { key: "ES", name: "Essentials", short: "Essentials",
+    desc: "Core competencies of an effective teacher: presence and disposition, pedagogical knowledge, content knowledge, and management of the learning environment.",
+    items: [
+      "Delivers / facilitates the lesson with knowledge and confidence",
+      "Communicates and upholds high expectations for learner behaviors",
+      "Facilitates use of resources supporting learner needs",
+      "Implements instructional strategies actively engaging learners",
+      "Manages learning time efficiently and optimally" ] },
+  { key: "AG", name: "Agency", short: "Agency",
+    desc: "Actions that foster learners' ability to self-direct and self-regulate learning.",
+    items: [
+      "Empowers learners to be responsible for learning",
+      "Gives learners choices about learning activities and tasks",
+      "Provides assistance navigating and monitoring learning progress",
+      "Encourages learners to persevere with challenging activities and tasks",
+      "Builds learners' growth mindset and self-efficacy" ] },
+  { key: "RL", name: "Relationships", short: "Relations",
+    desc: "Actions that foster healthy, positive connections between the teacher and learners.",
+    items: [
+      "Promotes respectful and caring interactions toward and between learners",
+      "Cultivates learner cooperation, collaboration, and inclusivity",
+      "Preserves learners' dignity while attending to individual needs" ] }
+];
+const SCALE = {
+  4: { label: "Very Evident",     pct: "more than 75% of learners" },
+  3: { label: "Evident",          pct: "51–74% of learners" },
+  2: { label: "Somewhat Evident", pct: "25–50% of learners" },
+  1: { label: "Not Evident",      pct: "less than 25% of learners" }
+};
+const FACTORS = [
+  ["impl",  "Implementation of Practices", "Extent the teacher implements observable actions with quality and fidelity"],
+  ["auth",  "Authenticity of Practices",   "Degree the practices are embedded in the classroom routinely"],
+  ["eff",   "Effect on Learners",          "Extent the practices influence learner engagement and response"]
+];
+function allIndicators() {
+  const out = [];
+  ATOT.forEach(d => d.items.forEach((t, i) => out.push({ code: d.key + (i + 1), dim: d.key, text: t })));
+  return out;
+}
+const INDICATORS = allIndicators();          // 23
+
+/* ---------- teacher / student action tallies ---------- */
+const TEACHER_ACTIONS = [
+  ["t_direct",  "Direct instruction"],  ["t_model",   "Modeling / think-aloud"],
+  ["t_quest",   "Questioning"],         ["t_facil",   "Facilitating discussion"],
+  ["t_small",   "Small-group instruction"], ["t_confer", "Conferring 1:1"],
+  ["t_monitor", "Monitoring / circulating"], ["t_feed",  "Giving feedback"],
+  ["t_assess",  "Checking for understanding"], ["t_redirect", "Redirecting behavior"],
+  ["t_logist",  "Managing materials"],  ["t_desk",    "At desk / not engaged"]
+];
+const STUDENT_ACTIONS = [
+  ["s_listen",  "Listening / watching"], ["s_respond", "Responding to questions"],
+  ["s_discuss", "Discussing with peers"], ["s_read",   "Reading"],
+  ["s_write",   "Writing"],              ["s_solve",  "Problem solving"],
+  ["s_hands",   "Hands-on / investigating"], ["s_present", "Presenting / explaining"],
+  ["s_indep",   "Working independently"], ["s_collab", "Collaborating in groups"],
+  ["s_tech",    "Using technology purposefully"], ["s_off",  "Off task / waiting"]
+];
+
+/* ---------- environment checklists ---------- */
+const CHECKLISTS = {
+  room: { name: "Room environment", icon: "▣", items: [
+    ["r1", "Learning target or objective posted and visible"],
+    ["r2", "Agenda or lesson flow visible to students"],
+    ["r3", "Anchor charts / word wall current and referenced"],
+    ["r4", "Current student work displayed with standards evident"],
+    ["r5", "Materials accessible to students without teacher help"],
+    ["r6", "Seating arrangement supports the day's task"],
+    ["r7", "Clear sightlines — teacher can see all students"],
+    ["r8", "Traffic paths clear and uncluttered"],
+    ["r9", "Classroom library / resources organized and in use"],
+    ["r10","Technology set up and functioning"] ] },
+  systems: { name: "Systems & routines", icon: "⟳", items: [
+    ["y1", "Entry routine established; class started promptly"],
+    ["y2", "Attention signal used and honored"],
+    ["y3", "Transitions efficient (under two minutes)"],
+    ["y4", "Materials distribution and collection routinized"],
+    ["y5", "Behavior expectations posted and referenced"],
+    ["y6", "Positive narration / specific praise used"],
+    ["y7", "Clear procedure for questions and help-seeking"],
+    ["y8", "Students know what to do when finished"],
+    ["y9", "Closure or exit routine evident"],
+    ["y10","High time on task throughout the visit"] ] },
+  safety: { name: "Safety & compliance", icon: "⚑", items: [
+    ["f1", "Emergency procedures posted and current"],
+    ["f2", "Exits and egress paths clear"],
+    ["f3", "Safety equipment accessible and unobstructed"],
+    ["f4", "Required postings present"],
+    ["f5", "Substitute folder / plans accessible"],
+    ["f6", "Student information secured, not publicly displayed"],
+    ["f7", "Lighting and temperature appropriate"],
+    ["f8", "Furniture and equipment in safe condition"],
+    ["f9", "Cords and technology safely managed"],
+    ["f10","Supervision appropriate for the activity"] ] }
+};
+
+/* ==============================================================
+   SAKS HIGH SCHOOL — 2026-27 master schedule
+   [name, room, department, 1st-half blocks 1–5, 2nd-half blocks 1–5]
+   An empty block is a planning period. Names are exactly as they
+   appear on the master schedule; edit any of them in Staff.
+   ============================================================== */
+const SCHOOL_NAME = "Saks High School";
+const DISTRICT_NAME = "Calhoun County Schools";
+const BLOCKS = [
+  { n: 1, start: "07:55", end: "09:13" },
+  { n: 2, start: "09:17", end: "10:35" },
+  { n: 3, start: "10:39", end: "12:17" },
+  { n: 4, start: "12:21", end: "13:39" },
+  { n: 5, start: "13:43", end: "15:01" }
+];
+const SAKS_ROSTER = [
+  ["Batchelor", "306", "Math", ["Math Mod", "Alg 2", "Alg 2 Hon", "Dual MS112", ""], ["Math Mod", "", "Math Mod", "Alg 2", "Geo"]],
+  ["E. Beverly", "206", "Math", ["", "Math 7 ACC", "Wildcat", "Math 7", "Math 7"], ["", "Math 7 ACC", "Wildcat", "Math 7", "Math 7"]],
+  ["Curvin", "304", "Math", ["Geo", "Geo", "Alg 1 Hon", "Alg 2", ""], ["Alg 1", "Geo Hon", "Alg 1", "Alg 1", ""]],
+  ["M. Beverly", "204", "Math", ["Math 8 ACC", "Math 8", "Wildcat", "", "Math 8"], ["Math 8 ACC", "Math 8", "Wildcat", "", "Math 8"]],
+  ["ELA 8", "205", "ELA", ["Eng 8", "Eng 8 Adv", "Eng 8", "", "Eng 8"], ["Eng 8", "Eng 8 Adv", "Eng 8", "", "Eng 8"]],
+  ["Cornutt", "105", "ELA", ["Eng 12", "Eng 12", "Eng 10", "Eng 10", ""], ["Eng 9 Hon", "Eng 10", "Eng 10 Hon", "Eng 12", ""]],
+  ["Davis", "201", "ELA", ["", "Eng 7", "Wildcat", "Eng 7 Adv", "Eng 7"], ["", "Eng 7", "Wildcat", "Eng 7 Adv", "Eng 7"]],
+  ["Roberts", "211", "ELA", ["Eng 11", "", "Eng 11", "Dual EH 101", "Eng 9"], ["Eng 9", "Eng 9", "Eng 11", "Dual EH 102", ""]],
+  ["Bradford", "111", "Science", ["Bio Honors", "BIO", "Anatomy", "ESS", ""], ["ESS", "BIO", "ESS", "ACT Prep", ""]],
+  ["Burney", "208", "Science", ["Sc 8", "Sc 7", "", "Sc 7", "Sc 7"], ["", "Sc 8", "Wildcat", "Chemistry", "Sc 8"]],
+  ["Coffey", "107", "Science", ["Phy Sc", "For", "Phy SC", "For", ""], ["BIO", "For", "Physics Hon", "Phy Sc", ""]],
+  ["A. Kilgore", "302", "Social Studies", ["", "His 10", "His 11", "His 10", "Athletics"], ["", "His 11", "His 10", "His 11", "Athletics"]],
+  ["Owen", "301", "Social Studies", ["WH", "WH Hon", "Gov", "WH", ""], ["Gov", "Gov", "Gov Hon", "WH", ""]],
+  ["Martin", "104", "Social Studies", ["HTH", "", "HTH", "Dual His 201", "Athletics"], ["His 8", "Dual His 202", "HTH", "PE 8", ""]],
+  ["Norton", "202", "Social Studies / PE", ["PE 7", "His 8", "", "PE 8", "His 8"], ["PE 7", "His 7", "", "His 7", "His 7"]],
+  ["Easley", "Gym", "PE / Athletics", ["7th Gr ATH", "ACT prep", "", "8th Gr ATH", "ATH 9/12"], ["7th Gr Ath", "PE", "", "8th Gr ATH", "ATH 9/12"]],
+  ["Snider", "Gym", "PE / Athletics", ["7th Gr ATH", "", "CP", "8th Gr ATH", "ATH 9/12"], ["CP", "", "CP", "8th Gr ATH", "ATH 9/12"]],
+  ["Franksain", "Band", "Band", ["SES", "", "JH Band", "SH Band", "SH Band"], ["SES", "", "JH Band", "SH Band", "SH Band"]],
+  ["Kilgore", "Choir", "Choir", ["SES", "", "JH Choir", "SH Choir", "SH Choir"], ["SES", "", "JH Choir", "SH Choir", "SH Choir"]],
+  ["Ginn", "AG", "Agriscience", ["", "AG", "Forestry", "AG", "AG"], ["AG", "AG", "Forestry", "", "AG"]],
+  ["Neece", "207", "CTE", ["BS1", "", "BS1", "Robotics", "DMD"], ["", "Robotics", "DMD", "ECS", "ECS"]],
+  ["Zellar", "305", "FACS", ["FACS", "", "NF", "CF", "CF"], ["NF", "", "FACS", "FACS", "FW"]]
+];
+function rosterId(name) { return "saks-" + name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+function rosterRecord(r) {
+  const uniq = a => a.filter((x, i) => x && a.indexOf(x) === i);
+  return { id: rosterId(r[0]), name: r[0], room: r[1], dept: r[2],
+    assignment: r[2] + " · " + uniq(r[3].concat(r[4])).join(", "),
+    schedule: { s1: r[3], s2: r[4] }, status: "active", school: SCHOOL_NAME,
+    source: "master-schedule-2026-27", createdAt: now() };
+}
+
+/* ==============================================================
+   TIME LOG — categories set by the superintendent.
+   The hints are local wording to keep logging consistent; the
+   district supplied category names only. Edit freely.
+   ============================================================== */
+const TIME_CATS = [
+  { key: "communication", name: "Communication",
+    hint: "Parent and community contact, email, calls, newsletters, staff communication, central office." },
+  { key: "culture", name: "Culture",
+    hint: "Building climate, staff morale and recognition, traditions, PBIS and school-wide expectations." },
+  { key: "instructional", name: "Instructional Leader",
+    hint: "Walkthroughs and observations, feedback, PLCs, data meetings, PD, curriculum and planning." },
+  { key: "discipline", name: "Discipline",
+    hint: "Office referrals, investigations, conferences about behavior, consequences, documentation." },
+  { key: "support", name: "Student Support",
+    hint: "IEP, 504 and PST meetings, counseling and attendance follow-up, student conferences not about discipline." },
+  { key: "supervision", name: "General Supervision",
+    hint: "Arrival, dismissal, lunch, hallways, buses, games and evening events." },
+  { key: "other", name: "Other",
+    hint: "Anything that fits none of the above. A short note is required so the report explains it." }
+];
+const CAT = Object.fromEntries(TIME_CATS.map(c => [c.key, c]));
+
+/* ==============================================================
+   STORAGE
+   A separate database name from the ATOT app: both apps can live on
+   the same github.io origin, and IndexedDB is shared per origin.
+   ============================================================== */
+const DB_NAME = "adminhubdb", DB_VER = 1;
+const STORES = ["staff", "visits", "meta", "time"];
+let _db = null;
+function openDB() {
+  return new Promise((res, rej) => {
+    if (_db) return res(_db);
+    const req = indexedDB.open(DB_NAME, DB_VER);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      STORES.forEach(s => { if (!db.objectStoreNames.contains(s)) db.createObjectStore(s, { keyPath: "id" }); });
+    };
+    req.onsuccess = () => { _db = req.result; res(_db); };
+    req.onerror = () => rej(req.error);
+  });
+}
+const tx = (s, m) => _db.transaction(s, m).objectStore(s);
+async function dbAll(store) {
+  await openDB();
+  return new Promise(r => { const q = tx(store, "readonly").getAll();
+    q.onsuccess = () => r(q.result || []); q.onerror = () => r([]); });
+}
+async function dbPut(store, obj) {
+  await openDB();
+  return new Promise(r => { const q = tx(store, "readwrite").put(obj);
+    q.onsuccess = () => r(obj); q.onerror = () => r(obj); });
+}
+async function dbDel(store, id) {
+  await openDB();
+  return new Promise(r => { const q = tx(store, "readwrite").delete(id);
+    q.onsuccess = () => r(); q.onerror = () => r(); });
+}
+async function dbClear(store) {
+  await openDB();
+  return new Promise(r => { const q = tx(store, "readwrite").clear();
+    q.onsuccess = () => r(); q.onerror = () => r(); });
+}
+
+const S = { staff: [], visits: [], time: [], settings: null, draft: null, tomb: null };
+
+function defaultSettings() {
+  return { id: "settings", observerName: "", school: SCHOOL_NAME, district: DISTRICT_NAME,
+    sheetUrl: "", sheetSecret: "", timeSheetUrl: "", autoSync: true, lastSync: null,
+    atotCountsAsTime: true,                     // finished walkthroughs log Instructional Leader minutes
+    scheduleHalf: "auto",                       // "auto" | "1" | "2" — which half of the master schedule
+    quickDims: ["LR", "ES"],                    // default focus for quick mode
+    sections: { actions: true, room: true, systems: true, safety: true },
+    createdAt: now() };
+}
+async function loadAll() {
+  const [st, vi, me, tm] = await Promise.all([dbAll("staff"), dbAll("visits"), dbAll("meta"), dbAll("time")]);
+  S.staff = st; S.visits = vi; S.time = tm;
+  S.settings = Object.assign(defaultSettings(), me.find(x => x.id === "settings") || {});
+  S.draft = me.find(x => x.id === "draft") || null;
+  S.tomb = me.find(x => x.id === "timeTombstones") || { id: "timeTombstones", ids: [] };
+  if (!me.find(x => x.id === "settings")) await dbPut("meta", S.settings);
+  /* first run: load the Saks roster so the dropdown is ready */
+  if (!me.find(x => x.id === "rosterSeeded")) {
+    await seedRoster(false);
+    await dbPut("meta", { id: "rosterSeeded", at: now() });
+  }
+}
+/* Adds any master-schedule teacher not already present. With replace=true,
+   also refreshes room/schedule on existing master-schedule entries but keeps
+   any name the principal has edited. Visits stay linked by id. */
+async function seedRoster(replace) {
+  let added = 0;
+  for (const r of SAKS_ROSTER) {
+    const rec = rosterRecord(r), cur = staffById(rec.id);
+    if (!cur) { await dbPut("staff", rec); S.staff.push(rec); added++; }
+    else if (replace) {
+      Object.assign(cur, { room: rec.room, dept: rec.dept, assignment: rec.assignment,
+        schedule: rec.schedule, status: "active", updatedAt: now() });
+      await dbPut("staff", cur);
+    }
+  }
+  return added;
+}
+async function saveSettings() { S.settings.updatedAt = now(); await dbPut("meta", S.settings); }
+
+/* ---------- helpers ---------- */
+function uid() {
+  const u = crypto.getRandomValues(new Uint8Array(9));
+  return Array.from(u).map(x => x.toString(36)).join("").slice(0, 14);
+}
+function now() { return new Date().toISOString(); }
+function esc(s) { return String(s == null ? "" : s)
+  .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
+function todayISO() { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0, 10); }
+function fmtDate(iso) {
+  if (!iso) return "—";
+  const d = new Date(iso.length === 10 ? iso + "T12:00:00" : iso);
+  if (isNaN(d)) return "—";
+  return d.toLocaleDateString(undefined, { month: "short", day: "numeric",
+    year: d.getFullYear() === new Date().getFullYear() ? undefined : "numeric" });
+}
+function daysAgo(iso) {
+  if (!iso) return null;
+  const d = new Date(iso.length === 10 ? iso + "T12:00:00" : iso);
+  return isNaN(d) ? null : Math.floor((Date.now() - d.getTime()) / 86400000);
+}
+function agoLabel(iso) {
+  const n = daysAgo(iso);
+  if (n === null) return "never";
+  if (n <= 0) return "today";
+  if (n === 1) return "yesterday";
+  if (n < 30) return n + "d ago";
+  if (n < 365) return Math.round(n / 30) + "mo ago";
+  return Math.round(n / 365) + "y ago";
+}
+function initials(n) {
+  return (n || "?").trim().split(/\s+/).slice(0, 2).map(w => w[0] || "").join("").toUpperCase() || "?";
+}
+function mmss(sec) {
+  sec = Math.max(0, Math.floor(sec));
+  const m = Math.floor(sec / 60), s = sec % 60;
+  return (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+}
+function staffById(id) { return S.staff.find(t => t.id === id); }
+function sName(id) { const t = staffById(id); return t ? t.name : "Unknown"; }
+function val(id) { const e = document.getElementById(id); return e ? e.value.trim() : ""; }
+function round1(n) { return Math.round(n * 10) / 10; }
+
+let _toastT;
+function toast(msg) {
+  document.querySelectorAll(".toast").forEach(n => n.remove());
+  const el = document.createElement("div");
+  el.className = "toast"; el.textContent = msg; document.body.appendChild(el);
+  clearTimeout(_toastT); _toastT = setTimeout(() => el.remove(), 2400);
+}
+function sheet(title, html) {
+  closeSheet();
+  const s = document.createElement("div");
+  s.className = "scrim"; s.id = "scrim";
+  s.innerHTML = '<div class="sheet" onclick="event.stopPropagation()"><div class="grab"></div>' +
+    (title ? "<h3>" + esc(title) + "</h3>" : "") + html + "</div>";
+  s.onclick = closeSheet;
+  document.body.appendChild(s);
+  const fi = s.querySelector("input:not([type=checkbox]),textarea,select");
+  if (fi && !("ontouchstart" in window)) setTimeout(() => fi.focus(), 70);
+}
+function closeSheet() { const s = document.getElementById("scrim"); if (s) s.remove(); }
+function confirmSheet(title, body, label, fn) {
+  window.__cfn = fn;
+  sheet(title, '<p class="muted" style="margin:0 0 15px">' + esc(body) + "</p>" +
+    '<div class="btnrow"><button class="btn" onclick="closeSheet()">Cancel</button>' +
+    '<button class="btn dan" onclick="closeSheet();window.__cfn()">' + esc(label) + "</button></div>");
+}
+
+/* ==============================================================
+   STUDENT-PII GUARD
+   Observations are about adults. Individual students should never
+   be identifiable in this record.
+   ============================================================== */
+const HARD_PATTERNS = [
+  { re: /\b\d{3}-\d{2}-\d{4}\b/, label: "Social Security number" },
+  { re: /[\w.+-]+@[\w-]+\.[A-Za-z]{2,}/, label: "email address" },
+  { re: /\b(?:\+?1[-. ])?\(?\d{3}\)?[-. ]\d{3}[-. ]\d{4}\b/, label: "phone number" },
+  { re: /\b\d{5,}\b/, label: "ID number" },
+  { re: /\b(?:0?[1-9]|1[0-2])[\/\-](?:0?[1-9]|[12]\d|3[01])[\/\-](?:19|20)\d{2}\b/, label: "date of birth" },
+  { re: /\b(?:student\s*(?:id|number|#)|lunch\s*(?:id|number)|state\s*id)\s*[:#]?\s*\w+/i, label: "student identifier" }
+];
+const CONTEXT_PATTERNS = [
+  { re: /\b(?:[Aa] |[Tt]he |[Oo]ne )?[Ss]tudents?\s+(?:named|called)\s+([A-Z][a-z]+)/g, label: "student named" },
+  { re: /\b(?:[Kk]id|[Cc]hild|[Ll]earner|[Pp]upil)\s+(?:named|called)\s+([A-Z][a-z]+)/g, label: "child named" },
+  { re: /\b(?:IEP|504|ELL|MLL|SPED|RTI|MTSS)\s+(?:[Ss]tudents?\s+)?([A-Z][a-z]+)/g, label: "student tied to a service" },
+  { re: /\b([A-Z][a-z]+)(?:'s)?\s+(?:IEP|504 plan|behavior plan|diagnosis)/g, label: "student tied to a plan" }
+];
+const NONNAME = new Set(("monday tuesday wednesday thursday friday saturday sunday january february " +
+  "march april may june july august september october november december the this that these those " +
+  "i he she they we it her his their our your my a an and but or if when while during after before " +
+  "next last first second third final also then most many some all each every few several both " +
+  "students student teacher teachers class classroom kids group groups table tables partner partners " +
+  "math english science reading writing social studies history biology chemistry physics algebra " +
+  "geometry calculus civics geography art music health spanish french german latin " +
+  "grade grades unit lesson chapter standard standards domain level room period block day week " +
+  "quarter semester trimester fall spring winter summer school district elementary middle high " +
+  "there here today tomorrow yesterday now later again still only just even really very much more " +
+  "walkthrough observation coaching debrief modeling session cycle goal target evidence data " +
+  "culture climate learning essentials agency relationships evident somewhat " +
+  "exit ticket warm cool turn talk think pair share cold call wait time depth knowledge " +
+  "webb bloom taxonomy common core next generation alabama atot atgp").split(" "));
+const ED_PHRASES = new Set(["common core","next generation","depth of knowledge","exit ticket",
+  "learning target","success criteria","wait time","cold call","think aloud","close reading",
+  "number talk","socratic seminar","turn and","think pair","gradual release","project based",
+  "universal design","charlotte danielson","robert marzano","john hattie","doug lemov","carol dweck",
+  "very evident","somewhat evident","not evident","teacher growth","observation tool"]);
+
+function allowedNames() {
+  const s = new Set();
+  const add = v => { if (v) String(v).toLowerCase().split(/\s*,\s*/).forEach(x => { if (x.trim()) s.add(x.trim()); }); };
+  S.staff.forEach(t => { add(t.name); add(t.school); });
+  if (S.settings) { add(S.settings.observerName); add(S.settings.school); add(S.settings.district); }
+  Array.from(s).forEach(n => n.split(/\s+/).forEach(w => { if (w.length > 2) s.add(w); }));
+  return s;
+}
+function scanPII(text) {
+  const hard = [], soft = [], seen = new Set();
+  if (!text || !text.trim()) return { hard: hard, soft: soft };
+  HARD_PATTERNS.forEach(p => {
+    const m = text.match(p.re);
+    if (m && !seen.has("h" + p.label)) { seen.add("h" + p.label); hard.push({ label: p.label, sample: m[0] }); }
+  });
+  CONTEXT_PATTERNS.forEach(p => {
+    const re = new RegExp(p.re.source, p.re.flags); let m;
+    while ((m = re.exec(text)) !== null) {
+      const s = m[1] || m[0];
+      if (!seen.has("s" + s)) { seen.add("s" + s); soft.push({ label: p.label, sample: s }); }
+      if (!re.global) break;
+    }
+  });
+  const allow = allowedNames();
+  const pair = /\b([A-Z][a-z]{1,14})\s+([A-Z][a-z]{1,14})\b/g; let m2;
+  while ((m2 = pair.exec(text)) !== null) {
+    const full = (m2[1] + " " + m2[2]).toLowerCase();
+    const w1 = m2[1].toLowerCase(), w2 = m2[2].toLowerCase();
+    if (allow.has(full) || ED_PHRASES.has(full)) continue;
+    if (NONNAME.has(w1) || NONNAME.has(w2)) continue;
+    if (!seen.has("s" + m2[0])) { seen.add("s" + m2[0]); soft.push({ label: "possible full name", sample: m2[0] }); }
+  }
+  return { hard: hard, soft: soft };
+}
+function redact(text, f) {
+  let out = text, n = 0; const map = {};
+  (f.soft || []).forEach(x => { if (!map[x.sample]) { n++; map[x.sample] = "S" + n; }
+    out = out.split(x.sample).join(map[x.sample]); });
+  (f.hard || []).forEach(x => { out = out.split(x.sample).join("[removed]"); });
+  return out;
+}
+const anyPII = f => f.hard.length > 0 || f.soft.length > 0;
+function guard(text, onPass) {
+  const f = scanPII(text);
+  if (!anyPII(f)) return onPass(text);
+  window.__gp = onPass; window.__gt = text; window.__gf = f;
+  let h = "";
+  if (f.hard.length) h += '<div class="warnbox"><h4>Blocked — this cannot be saved</h4><ul>' +
+    f.hard.map(x => "<li>" + esc(x.label) + ": <code>" + esc(x.sample) + "</code></li>").join("") + "</ul></div>";
+  if (f.soft.length) h += '<div class="warnbox soft"><h4>Looks like it might name a person</h4><ul>' +
+    f.soft.map(x => "<li><code>" + esc(x.sample) + "</code> — " + esc(x.label) + "</li>").join("") + "</ul></div>";
+  h += '<p class="tiny muted" style="margin:0 0 12px">Observation records are about the teacher. ' +
+    'Describe what a student did, not who they are — <b>S1</b>, "a student at the back table", ' +
+    '"the group nearest the door".</p>';
+  h += '<div class="tiny" style="background:var(--bg);padding:10px;border-radius:9px;' +
+    'white-space:pre-wrap;margin-bottom:12px"><b>Cleaned version:</b><br>' + esc(redact(text, f)) + "</div>";
+  h += '<button class="btn pri full" onclick="guardClean()">Use the cleaned version</button>';
+  h += '<button class="btn full" style="margin-top:8px" onclick="closeSheet()">Go back and edit</button>';
+  if (f.hard.length === 0)
+    h += '<label class="ack"><input type="checkbox" onchange="document.getElementById(\'gk\').disabled=!this.checked">' +
+      "<span>None of the flagged names are students — they are adults, authors, or curriculum names.</span></label>" +
+      '<button class="btn full" id="gk" disabled onclick="guardKeep()">Keep as written</button>';
+  sheet("Check before saving", h);
+}
+function guardClean() { const c = redact(window.__gt, window.__gf); closeSheet(); window.__gp(c);
+  toast("Saved with identifiers removed"); }
+function guardKeep() { closeSheet(); window.__gp(window.__gt); }
+
+/* ==============================================================
+   GOOGLE SHEETS SYNC
+   Posted as a "simple request" (text/plain) so the browser skips
+   the CORS preflight that Apps Script cannot answer.
+   ============================================================== */
+function sheetHeader() {
+  return ["Timestamp", "VisitID", "Observer", "School", "Teacher", "Grade/Subject", "Period",
+    "Date", "Mode", "Minutes", "Students"]
+    .concat(INDICATORS.map(i => i.code))
+    .concat(ATOT.map(d => d.short + " Avg"))
+    .concat(["Overall Avg", "Indicators Rated",
+      "Room %", "Systems %", "Safety %", "Concerns Flagged",
+      "Teacher Actions", "Student Actions", "Student Engagement %",
+      "Strengths", "Growth Area", "Next Steps", "Evidence Notes"]);
+}
+function sheetRow(v) {
+  const dimAvgs = ATOT.map(d => {
+    const vals = d.items.map((_, i) => v.scores[d.key + (i + 1)]).filter(x => x > 0);
+    return vals.length ? round1(vals.reduce((a, b) => a + b, 0) / vals.length) : "";
+  });
+  const rated = Object.values(v.scores).filter(x => x > 0);
+  const overall = rated.length ? round1(rated.reduce((a, b) => a + b, 0) / rated.length) : "";
+  const ckPct = k => {
+    const items = CHECKLISTS[k].items, ans = items.filter(it => v.checks[k] && v.checks[k][it[0]] !== undefined);
+    if (!ans.length) return "";
+    const yes = ans.filter(it => v.checks[k][it[0]] === true).length;
+    return Math.round(yes / ans.length * 100);
+  };
+  const concerns = [];
+  Object.keys(CHECKLISTS).forEach(k => CHECKLISTS[k].items.forEach(it => {
+    if (v.checks[k] && v.checks[k][it[0]] === false) concerns.push(it[1]);
+  }));
+  const tallyStr = (list, obj) => list.filter(a => obj[a[0]])
+    .sort((a, b) => obj[b[0]] - obj[a[0]]).map(a => a[1] + " (" + obj[a[0]] + ")").join("; ");
+  const sTot = STUDENT_ACTIONS.reduce((n, a) => n + (v.studentActions[a[0]] || 0), 0);
+  const sOff = v.studentActions.s_off || 0;
+  const engaged = sTot ? Math.round((sTot - sOff) / sTot * 100) : "";
+
+  return [v.createdAt, v.id, v.observerName || "", v.school || "", v.teacherName || "",
+    v.gradeSubject || "", v.period || "", v.date, v.mode === "full" ? "Full ATOT" : "Walkthrough",
+    Math.round((v.durationSec || 0) / 60), v.studentCount || ""]
+    .concat(INDICATORS.map(i => v.scores[i.code] || ""))
+    .concat(dimAvgs)
+    .concat([overall, rated.length, ckPct("room"), ckPct("systems"), ckPct("safety"),
+      concerns.join("; "),
+      tallyStr(TEACHER_ACTIONS, v.teacherActions), tallyStr(STUDENT_ACTIONS, v.studentActions),
+      engaged, v.strengths || "", v.growth || "", v.nextSteps || "",
+      (v.notes || []).map(n => mmss(n.at) + " " + n.text).join(" | ")]);
+}
+function pendingVisits() { return S.visits.filter(v => v.syncState !== "synced"); }
+function pendingTime() { return S.time.filter(e => e.syncState !== "synced"); }
+function timeUrl() { return S.settings.timeSheetUrl || S.settings.sheetUrl; }
+function pendingCount() {
+  return (S.settings.sheetUrl ? pendingVisits().length : 0) +
+    (timeUrl() ? pendingTime().length + S.tomb.ids.length : 0);
+}
+
+async function postJSON(url, body) {
+  const res = await fetch(url, {
+    method: "POST", redirect: "follow",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(Object.assign({ token: "adminhub-v1" }, body))
+  });
+  const txt = await res.text();
+  let j = null; try { j = JSON.parse(txt); } catch (e) {}
+  return { res: res, j: j };
+}
+
+let _syncing = false;
+async function syncNow(manual) {
+  const url = S.settings.sheetUrl, turl = timeUrl();
+  if (!url && !turl) { if (manual) toast("Add your Sheet link in Settings first"); return; }
+  if (_syncing) return;
+  if (!navigator.onLine) { if (manual) toast("No connection — queued for later"); return; }
+  if (!pendingCount()) { if (manual) toast("Everything is already synced"); return; }
+  _syncing = true; renderSyncBar("working");
+  let ok = 0, failed = 0;
+  const secret = S.settings.sheetSecret || "";
+  if (url) for (const v of pendingVisits()) {
+    try {
+      const r = await postJSON(url, { secret: secret, kind: "visit", visitId: v.id,
+        header: sheetHeader(), row: sheetRow(v) });
+      if (r.res.ok && r.j && (r.j.status === "ok" || r.j.status === "duplicate")) {
+        v.syncState = "synced"; v.syncedAt = now(); await dbPut("visits", v); ok++;
+      } else { v.syncState = "error"; v.syncError = (r.j && r.j.message) || ("HTTP " + r.res.status);
+        await dbPut("visits", v); failed++; }
+    } catch (e) {
+      v.syncState = "error"; v.syncError = e.message; await dbPut("visits", v); failed++;
+    }
+  }
+  if (turl) {
+    for (const e of pendingTime()) {
+      try {
+        const r = await postJSON(turl, { secret: secret, kind: "time", entryId: e.id,
+          header: timeHeader(), row: timeRow(e) });
+        if (r.res.ok && r.j && r.j.status === "ok") {
+          e.syncState = "synced"; e.syncedAt = now(); await dbPut("time", e); ok++;
+        } else { e.syncState = "error"; e.syncError = (r.j && r.j.message) || ("HTTP " + r.res.status);
+          await dbPut("time", e); failed++; }
+      } catch (err) { e.syncState = "error"; e.syncError = err.message; await dbPut("time", e); failed++; }
+    }
+    for (const id of S.tomb.ids.slice()) {
+      try {
+        const r = await postJSON(turl, { secret: secret, kind: "time", entryId: id, deleted: true });
+        if (r.res.ok && r.j && r.j.status === "ok") {
+          S.tomb.ids = S.tomb.ids.filter(x => x !== id); await dbPut("meta", S.tomb); ok++;
+        } else failed++;
+      } catch (err) { failed++; }
+    }
+  }
+  S.settings.lastSync = now(); await saveSettings();
+  _syncing = false;
+  if (manual || ok) toast(ok + " sent" + (failed ? ", " + failed + " failed" : ""));
+  route();
+}
+function syncStatus() {
+  const p = pendingCount();
+  if (!S.settings.sheetUrl && !timeUrl()) return { cls: "off", txt: "Saving to this device only — connect a Sheet in More" };
+  if (!navigator.onLine) return { cls: "pending", txt: p ? p + " item(s) waiting for a connection" : "Offline — all synced" };
+  if (_syncing) return { cls: "pending", txt: "Sending to your Sheet…" };
+  if (p) return { cls: "pending", txt: p + " item(s) not yet in the Sheet — tap to send" };
+  return { cls: "ok", txt: "Everything is in your Sheet" };
+}
+function renderSyncBar(state) {
+  const el = document.getElementById("syncbar");
+  if (!el) return;
+  const s = syncStatus();
+  el.className = "syncbar " + s.cls;
+  el.innerHTML = "<div class='grow'>" + esc(s.txt) + "</div>" +
+    (pendingCount() && navigator.onLine && !_syncing ? "<b>Send now ›</b>" : "");
+}
+window.addEventListener("online", () => { if (S.settings && S.settings.autoSync) syncNow(false); });
+
+/* ==============================================================
+   ROUTER
+   ============================================================== */
+const TABS = [
+  { hash: "#/home",    ic: "▤", label: "Home" },
+  { hash: "#/time",    ic: "◷", label: "Time" },
+  { hash: "#/new",     ic: "＋", label: "Observe" },
+  { hash: "#/reports", ic: "▥", label: "Reports" },
+  { hash: "#/more",    ic: "⋯", label: "More" }
+];
+function renderTabs(active) {
+  document.getElementById("tabs").innerHTML = TABS.map(t =>
+    '<a href="' + t.hash + '" class="' + (active === t.hash ? "on" : "") + '">' +
+    '<span class="ic">' + t.ic + "</span>" + t.label + "</a>").join("");
+}
+function setHeader(title, sub, left, right) {
+  document.getElementById("hdr").innerHTML = (left || "") +
+    '<div class="ttl">' + esc(title) + (sub ? '<span class="sub">' + esc(sub) + "</span>" : "") + "</div>" +
+    (right || "");
+}
+const backBtn = '<button class="back" onclick="history.back()">‹</button>';
+const LOGO = '<img class="logo" src="icons/saks-logo.png" alt="">';
+const ROUTES = [
+  [/^#\/home$/,        () => viewHome()],
+  [/^#\/staff$/,       () => viewStaff()],
+  [/^#\/teacher\/(.+)$/, m => viewTeacher(m[1])],
+  [/^#\/new$/,         () => viewNew()],
+  [/^#\/capture$/,     () => viewCapture()],
+  [/^#\/visit\/(.+)$/, m => viewVisit(m[1])],
+  [/^#\/reports$/,     () => viewReports()],
+  [/^#\/more$/,        () => viewMore()],
+  [/^#\/sheet$/,       () => viewSheetSetup()],
+  [/^#\/time$/,        () => viewTime()],
+  [/^#\/month$/,       () => viewMonth()]
+];
+function route() {
+  closeSheet();
+  const h = location.hash || "#/home";
+  for (const [re, fn] of ROUTES) {
+    const m = h.match(re);
+    if (m) {
+      const base = "#/" + h.slice(2).split("/")[0];
+      const tab = { "#/capture": "#/new", "#/visit": "#/home", "#/teacher": "#/new",
+        "#/staff": "#/new", "#/sheet": "#/more", "#/month": "#/time" }[base] || base;
+      renderTabs(TABS.some(t => t.hash === h) ? h : tab);
+      window.scrollTo(0, 0);
+      return fn(m);
+    }
+  }
+  location.hash = "#/home";
+}
+
+/* ==============================================================
+   VIEW: HOME
+   ============================================================== */
+function viewHome() {
+  const s = S.settings;
+  setHeader("Admin Hub", (s.observerName ? s.observerName + " · " : "") + (s.school || SCHOOL_NAME), LOGO,
+    '<button onclick="location.hash=\'#/time\'">+ Time</button>');
+
+  const today = S.visits.filter(v => v.date === todayISO());
+  const week = S.visits.filter(v => daysAgo(v.date) !== null && daysAgo(v.date) <= 7);
+  const active = S.staff.filter(t => t.status !== "inactive");
+  const notSeen = active.filter(t => {
+    const last = lastVisitFor(t.id);
+    return !last || daysAgo(last) > (s.visitCadenceDays || 30);
+  });
+
+  let h = '<div class="syncbar" id="syncbar" onclick="syncNow(true)"></div>';
+  h += homeTimeCard();
+  h += '<div class="sect">Walkthroughs</div>';
+
+  if (!S.staff.length) {
+    h += '<div class="card"><h3 style="margin-bottom:6px">Set up in two minutes</h3>' +
+      '<p class="muted tiny" style="margin:0 0 12px">Add your teachers, then connect a Google Sheet ' +
+      'if you want visits to roll up automatically. Everything works offline either way.</p>' +
+      '<div class="btnrow"><button class="btn pri" onclick="addStaffSheet()">Add teachers</button>' +
+      '<button class="btn" onclick="location.hash=\'#/sheet\'">Connect Sheet</button></div></div>';
+  }
+  h += '<div class="stats">' +
+    '<div class="stat"><div class="n">' + today.length + '</div><div class="l">Today</div></div>' +
+    '<div class="stat"><div class="n">' + week.length + '</div><div class="l">This week</div></div>' +
+    '<div class="stat"><div class="n">' + notSeen.length + '</div><div class="l">Not seen</div></div></div>';
+
+  if (S.draft && S.draft.teacherId) {
+    h += '<div class="card tap" style="border-color:var(--brand)" onclick="location.hash=\'#/capture\'">' +
+      '<div class="row"><div class="grow"><span class="pill warn">In progress</span>' +
+      '<div style="margin-top:6px;font-weight:650">' + esc(sName(S.draft.teacherId)) + "</div>" +
+      '<div class="tiny muted">Unfinished observation — tap to resume</div></div>' +
+      '<div style="font-size:20px;color:var(--brand)">›</div></div></div>';
+  }
+  if (notSeen.length) {
+    h += '<div class="sect">Haven\'t visited recently</div>';
+    h += notSeen.slice(0, 6).map(t =>
+      '<div class="card tap" onclick="startVisit(\'' + t.id + '\')">' +
+      '<div class="row"><div class="grow"><div style="font-weight:650" class="trunc">' + esc(t.name) + "</div>" +
+      '<div class="tiny muted trunc">' + esc(t.assignment || "—") + " · last " +
+      agoLabel(lastVisitFor(t.id)) + "</div></div>" +
+      '<span class="pill">Observe ›</span></div></div>').join("");
+  }
+  h += '<div class="sect">Recent visits</div>';
+  const recent = S.visits.slice().sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || "")).slice(0, 8);
+  h += recent.length ? recent.map(visitCard).join("") :
+    '<div class="card"><div class="empty"><span class="big">▤</span>' +
+    "No visits logged yet.<br>Tap <b>Observe</b> to start one.</div></div>";
+  document.getElementById("app").innerHTML = h;
+  renderSyncBar();
+}
+function lastVisitFor(teacherId) {
+  const v = S.visits.filter(x => x.teacherId === teacherId)
+    .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  return v.length ? v[0].date : null;
+}
+function overallOf(v) {
+  const r = Object.values(v.scores || {}).filter(x => x > 0);
+  return r.length ? round1(r.reduce((a, b) => a + b, 0) / r.length) : null;
+}
+function visitCard(v) {
+  const ov = overallOf(v);
+  const rated = Object.values(v.scores || {}).filter(x => x > 0).length;
+  return '<div class="card tap" onclick="location.hash=\'#/visit/' + v.id + '\'">' +
+    '<div class="row between"><div class="grow">' +
+    '<div style="font-weight:650" class="trunc">' + esc(v.teacherName || sName(v.teacherId)) + "</div>" +
+    '<div class="tiny muted">' + (v.mode === "full" ? "Full ATOT" : "Walkthrough") + " · " +
+    fmtDate(v.date) + " · " + Math.round((v.durationSec || 0) / 60) + " min</div></div>" +
+    (ov !== null ? '<div style="text-align:right"><div style="font-weight:700;font-size:17px;' +
+      'font-variant-numeric:tabular-nums">' + ov.toFixed(1) + "</div>" +
+      '<div class="mini muted">' + rated + " rated</div></div>" : "") + "</div>" +
+    '<div class="hr"></div><div class="row between mini muted"><div>' +
+    (v.nextSteps ? esc(v.nextSteps.slice(0, 46)) + (v.nextSteps.length > 46 ? "…" : "") : "No next step recorded") +
+    "</div>" +
+    (v.syncState === "synced" ? '<span class="pill ok">in Sheet</span>' :
+      S.settings.sheetUrl ? '<span class="pill warn">pending</span>' : "") + "</div></div>";
+}
+
+/* ==============================================================
+   VIEW: STAFF
+   ============================================================== */
+let staffFilter = "";
+function viewStaff() {
+  setHeader("Staff", S.staff.length + " teachers · " + (S.settings.school || SCHOOL_NAME), backBtn,
+    '<button onclick="addStaffSheet()">+ Add</button>');
+  let h = "";
+  if (S.staff.length > 6)
+    h += '<label class="f"><input type="text" placeholder="Search" value="' + esc(staffFilter) +
+      '" oninput="staffFilter=this.value;document.getElementById(\'sl\').innerHTML=staffListHTML()"></label>';
+  h += '<div id="sl">' + staffListHTML() + "</div>";
+  h += '<div class="btnrow" style="margin-top:12px"><button class="btn" onclick="bulkStaffSheet()">Paste names</button>' +
+    '<button class="btn" onclick="reseedRoster()">Reload master schedule</button></div>' +
+    '<p class="mini muted" style="margin:9px 2px 0;line-height:1.5">Reloading adds anyone missing from the ' +
+    "2026–27 master schedule and refreshes rooms and blocks. Names you have edited are kept.</p>";
+  document.getElementById("app").innerHTML = h;
+}
+function staffListHTML() {
+  const q = staffFilter.toLowerCase();
+  const list = S.staff.filter(t => !q || (t.name + " " + (t.assignment || "")).toLowerCase().includes(q))
+    .sort((a, b) => (a.status === "inactive") - (b.status === "inactive") || a.name.localeCompare(b.name));
+  if (!list.length) return '<div class="card"><div class="empty"><span class="big">◍</span>' +
+    (S.staff.length ? "No matches." : "No teachers yet.<br>Add them one at a time or paste a roster.") + "</div></div>";
+  return list.map(t => {
+    const n = S.visits.filter(v => v.teacherId === t.id).length;
+    const avg = teacherAvg(t.id);
+    return '<div class="card tap" onclick="location.hash=\'#/teacher/' + t.id + '\'">' +
+      '<div class="row"><div class="grow"><div class="row between" style="gap:8px">' +
+      '<div style="font-weight:650" class="trunc">' + esc(t.name) + "</div>" +
+      (avg !== null ? '<span class="pill flat" style="font-variant-numeric:tabular-nums">' +
+        avg.toFixed(1) + "</span>" : "") + "</div>" +
+      '<div class="tiny muted trunc">' + esc(t.assignment || "—") + "</div>" +
+      '<div class="mini muted" style="margin-top:2px">' + n + " visit" + (n === 1 ? "" : "s") +
+      " · last " + agoLabel(lastVisitFor(t.id)) + "</div></div></div></div>";
+  }).join("");
+}
+function teacherAvg(id) {
+  const vs = S.visits.filter(v => v.teacherId === id).map(overallOf).filter(x => x !== null);
+  return vs.length ? round1(vs.reduce((a, b) => a + b, 0) / vs.length) : null;
+}
+function addStaffSheet(id) {
+  const t = id ? staffById(id) : null;
+  sheet(t ? "Edit teacher" : "Add teacher",
+    '<label class="f"><span>Name</span><input type="text" id="s_name" value="' + esc(t ? t.name : "") +
+      '" placeholder="Last name, or first and last"></label>' +
+    '<label class="f"><span>Department / courses</span><input type="text" id="s_assign" value="' +
+      esc(t ? t.assignment || "" : "") + '" placeholder="Math · Alg 1, Geo"></label>' +
+    '<label class="f"><span>Room</span><input type="text" id="s_room" value="' +
+      esc(t ? t.room || "" : "") + '" placeholder="204"></label>' +
+    '<label class="f"><span>Status</span><select id="s_status">' +
+      '<option value="active"' + (t && t.status === "inactive" ? "" : " selected") + ">Active</option>" +
+      '<option value="inactive"' + (t && t.status === "inactive" ? " selected" : "") + ">Inactive</option>" +
+      "</select></label>" +
+    '<button class="btn pri full" onclick="saveStaff(' + (t ? "'" + t.id + "'" : "null") + ')">Save</button>');
+}
+async function saveStaff(id) {
+  const name = val("s_name");
+  if (!name) return toast("A name is required");
+  const t = id ? Object.assign({}, staffById(id)) : { id: uid(), createdAt: now() };
+  t.name = name; t.assignment = val("s_assign"); t.room = val("s_room");
+  t.status = val("s_status"); t.school = S.settings.school; t.updatedAt = now();
+  await dbPut("staff", t);
+  const i = S.staff.findIndex(x => x.id === t.id);
+  if (i >= 0) S.staff[i] = t; else S.staff.push(t);
+  closeSheet(); toast(id ? "Updated" : "Added"); route();
+}
+function bulkStaffSheet() {
+  sheet("Paste a roster",
+    '<p class="tiny muted" style="margin:0 0 12px">One teacher per line. Optionally add a comma and ' +
+    'their grade or subject:<br><code>Jordan Ellis, 4th grade ELA</code></p>' +
+    '<label class="f"><textarea id="bulk" style="min-height:170px" ' +
+      'placeholder="Jordan Ellis, 4th grade ELA&#10;Priya Raman, 7th grade math"></textarea></label>' +
+    '<button class="btn pri full" onclick="saveBulk()">Add all</button>');
+}
+async function saveBulk() {
+  const lines = val("bulk").split("\n").map(x => x.trim()).filter(Boolean);
+  let n = 0;
+  for (const line of lines) {
+    const parts = line.split(",");
+    const name = parts[0].trim();
+    if (!name || S.staff.some(t => t.name.toLowerCase() === name.toLowerCase())) continue;
+    const t = { id: uid(), name: name, assignment: (parts[1] || "").trim(),
+      room: (parts[2] || "").trim(), status: "active", school: S.settings.school, createdAt: now() };
+    await dbPut("staff", t); S.staff.push(t); n++;
+  }
+  closeSheet(); toast(n + " teacher" + (n === 1 ? "" : "s") + " added"); route();
+}
+function viewTeacher(id) {
+  const t = staffById(id);
+  if (!t) { location.hash = "#/staff"; return; }
+  setHeader(t.name, t.assignment || "", backBtn, '<button onclick="addStaffSheet(\'' + id + '\')">Edit</button>');
+  const vs = S.visits.filter(v => v.teacherId === id)
+    .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+
+  let h = '<button class="btn pri full" style="margin-bottom:12px" onclick="startVisit(\'' + id +
+    '\')">Start an observation</button>';
+  if (t.schedule) {
+    const half = scheduleHalf(), nw = teacherNow(t);
+    h += '<div class="sect">Schedule · ' + (half === "s1" ? "first" : "second") + " half</div>" +
+      '<div class="card" style="padding:6px 13px"><table class="data">' + BLOCKS.map(b => {
+        const c = (t.schedule[half] || [])[b.n - 1];
+        const on = nw && nw.block.n === b.n;
+        return "<tr" + (on ? ' style="background:var(--brand-soft)"' : "") + "><td style=\"width:4.5rem\"><b>Block " +
+          b.n + "</b></td><td>" + (c ? esc(c) : '<span class="muted">Planning</span>') + "</td>" +
+          '<td class="mini muted" style="text-align:right">' + fmtClock(b.start) + "–" + fmtClock(b.end) + "</td></tr>";
+      }).join("") + "</table></div>";
+  }
+
+  if (vs.length) {
+    const rows = ATOT.map(d => {
+      const all = [];
+      vs.forEach(v => d.items.forEach((_, i) => {
+        const s = v.scores[d.key + (i + 1)]; if (s > 0) all.push(s);
+      }));
+      return { label: d.short, value: all.length ? round1(all.reduce((a, b) => a + b, 0) / all.length) : 0,
+        n: all.length };
+    }).filter(r => r.n);
+    if (rows.length) {
+      h += '<div class="sect">Average by dimension</div><div class="card">' +
+        barChart(rows, 4, "Across " + vs.length + " visit" + (vs.length === 1 ? "" : "s")) + "</div>";
+    }
+  }
+  h += '<div class="sect">Visit history</div>';
+  h += vs.length ? vs.map(visitCard).join("") :
+    '<div class="card"><div class="empty tiny" style="padding:18px">No visits logged yet.</div></div>';
+  h += '<div style="margin-top:18px"><button class="btn dan full" onclick="delStaff(\'' + id +
+    '\')">Remove teacher</button></div>';
+  document.getElementById("app").innerHTML = h;
+}
+function delStaff(id) {
+  confirmSheet("Remove " + sName(id) + "?", "Their visit records are kept; only the roster entry is removed.",
+    "Remove", async () => {
+      await dbDel("staff", id); S.staff = S.staff.filter(x => x.id !== id);
+      toast("Removed"); location.hash = "#/staff";
+    });
+}
+
+/* ==============================================================
+   CHART — single series, one hue, direct labels, no legend
+   ============================================================== */
+function barChart(rows, max, caption) {
+  const m = max || Math.max.apply(null, rows.map(r => r.value)) || 1;
+  let h = '<div class="bars">';
+  rows.forEach(r => {
+    const pct = Math.max(0, Math.min(100, r.value / m * 100));
+    h += '<div class="bar"><div class="lab">' + esc(r.label) + "</div>" +
+      '<div class="track"><div class="fill" style="width:' + pct.toFixed(1) + '%"></div></div>' +
+      '<div class="val">' + (r.value ? r.value.toFixed(1) : "—") + "</div></div>";
+  });
+  h += "</div>";
+  h += '<div class="axis"><div></div><div class="ticks"><span>0</span><span>' +
+    (m === 4 ? "1" : "") + "</span><span>" + (m === 4 ? "2" : "") + "</span><span>" +
+    (m === 4 ? "3" : "") + "</span><span>" + m + "</span></div><div></div></div>";
+  if (caption) h += '<div class="mini muted" style="margin-top:7px">' + esc(caption) + "</div>";
+  return h;
+}
+
+/* ==============================================================
+   VIEW: NEW VISIT
+   ============================================================== */
+/* ---------- schedule helpers ---------- */
+function scheduleHalf(dateISO) {
+  const pref = S.settings.scheduleHalf;
+  if (pref === "1" || pref === "2") return "s" + pref;
+  const m = new Date((dateISO || todayISO()) + "T12:00:00").getMonth();   // 0 = Jan
+  return m >= 6 ? "s1" : "s2";                                           // Jul–Dec first half
+}
+function hm(str) { const p = str.split(":"); return +p[0] * 60 + +p[1]; }
+function fmtClock(str) { let h = +str.slice(0, 2); const m = str.slice(3);
+  return (h > 12 ? h - 12 : h) + ":" + m; }
+function blockAt(d) {
+  d = d || new Date();
+  if (d.getDay() === 0 || d.getDay() === 6) return null;
+  const mins = d.getHours() * 60 + d.getMinutes();
+  return BLOCKS.find(b => mins >= hm(b.start) && mins <= hm(b.end)) || null;
+}
+/* What the teacher is scheduled to be teaching right now, if anything. */
+function teacherNow(t) {
+  const b = blockAt();
+  if (!b || !t || !t.schedule) return null;
+  const course = (t.schedule[scheduleHalf()] || [])[b.n - 1] || "";
+  return { block: b, course: course };
+}
+function teacherOption(t) {
+  return esc(t.name) + (t.dept ? " — " + esc(t.dept) : "") + (t.room ? " · Rm " + esc(t.room) : "");
+}
+
+/* ==============================================================
+   VIEW: OBSERVE — pick a teacher from the Saks roster dropdown
+   ============================================================== */
+function viewNew() {
+  setHeader("Observe", "Choose a teacher", "",
+    '<button onclick="location.hash=\'#/staff\'">Staff</button>');
+  const active = S.staff.filter(t => t.status !== "inactive").sort((a, b) => a.name.localeCompare(b.name));
+  if (!active.length) {
+    document.getElementById("app").innerHTML = '<div class="card"><div class="empty">' +
+      '<span class="big">◍</span>No teachers on the roster.</div>' +
+      '<button class="btn pri full" onclick="reseedRoster()">Load the Saks roster</button>' +
+      '<button class="btn full" style="margin-top:8px" onclick="addStaffSheet()">Add a teacher</button></div>';
+    return;
+  }
+  let h = "";
+  if (S.draft && S.draft.teacherId) {
+    h += '<div class="card" style="border-color:var(--brand)"><span class="pill warn">In progress</span>' +
+      '<div style="font-weight:650;margin-top:7px">' + esc(sName(S.draft.teacherId)) + "</div>" +
+      '<div class="tiny muted" style="margin-bottom:11px">Unfinished observation.</div>' +
+      '<div class="btnrow"><button class="btn pri" onclick="location.hash=\'#/capture\'">Resume</button>' +
+      '<button class="btn dan" onclick="discardDraft()">Discard</button></div></div>';
+  }
+  const blk = blockAt();
+  h += '<div class="card"><label class="f"><span>Teacher</span><select id="pick" onchange="pickInfo()">' +
+    '<option value="">Choose a teacher…</option>' +
+    active.map(t => '<option value="' + t.id + '">' + teacherOption(t) + "</option>").join("") +
+    '</select></label><div id="pickinfo" class="tiny muted" style="margin:-4px 0 12px;min-height:1.2em">' +
+    (blk ? "Block " + blk.n + " is in session (" + fmtClock(blk.start) + "–" + fmtClock(blk.end) + ")." :
+      "No block in session right now.") + "</div>" +
+    '<button class="btn pri full" id="pickgo" disabled onclick="startVisit(val(\'pick\'))">Start observation</button></div>';
+
+  const notSeen = active.filter(t => { const l = lastVisitFor(t.id); return !l || daysAgo(l) > 30; });
+  if (notSeen.length) {
+    h += '<div class="sect">Not visited in 30 days · ' + notSeen.length + "</div>";
+    h += notSeen.slice(0, 8).map(t => {
+      const nw = teacherNow(t);
+      return '<div class="card tap" onclick="startVisit(\'' + t.id + '\')">' +
+        '<div class="row"><div class="grow"><div style="font-weight:650" class="trunc">' + esc(t.name) + "</div>" +
+        '<div class="tiny muted trunc">' + (nw ? (nw.course ? "Now: " + esc(nw.course) : "Now: planning") :
+          esc(t.dept || t.assignment || "—")) + (t.room ? " · Rm " + esc(t.room) : "") +
+        " · last " + agoLabel(lastVisitFor(t.id)) + "</div></div>" +
+        '<div style="font-size:19px;color:var(--brand)">›</div></div></div>';
+    }).join("");
+  }
+  document.getElementById("app").innerHTML = h;
+}
+function pickInfo() {
+  const t = staffById(val("pick")), el = document.getElementById("pickinfo");
+  document.getElementById("pickgo").disabled = !t;
+  if (!t) return;
+  const nw = teacherNow(t);
+  el.innerHTML = (nw ? "<b>Block " + nw.block.n + ":</b> " + (nw.course ? esc(nw.course) : "planning period") :
+    esc(t.assignment || "")) + " · last visited " + agoLabel(lastVisitFor(t.id));
+}
+async function reseedRoster() {
+  const n = await seedRoster(true);
+  toast(n ? n + " teachers added from the master schedule" : "Roster refreshed from the master schedule");
+  route();
+}
+function startVisit(teacherId) {
+  const t = staffById(teacherId);
+  if (!t) return;
+  const nw = teacherNow(t);
+  const per = nw ? "Block " + nw.block.n : "";
+  const subj = nw && nw.course ? nw.course : (t.dept || t.assignment || "");
+  sheet("Start observation",
+    '<div class="tiny muted" style="margin:-7px 0 13px">' + esc(t.name) + (t.room ? " · Rm " + esc(t.room) : "") + "</div>" +
+    '<label class="f"><span>Type</span><select id="n_mode">' +
+      '<option value="quick">Walkthrough — 3 to 5 minutes, focused</option>' +
+      '<option value="full">Full ATOT — 20 minutes, all 23 indicators</option></select></label>' +
+    '<label class="f"><span>Date</span><input type="date" id="n_date" value="' + todayISO() + '"></label>' +
+    '<div class="row" style="gap:9px">' +
+      '<label class="f grow"><span>Period / block</span><input type="text" id="n_period" value="' + esc(per) +
+        '" placeholder="Block 3"></label>' +
+      '<label class="f grow"><span>Students present</span><input type="number" id="n_count" min="0" placeholder="24"></label>' +
+    "</div>" +
+    '<label class="f"><span>Course observed</span><input type="text" id="n_subject" value="' + esc(subj) + '"></label>' +
+    '<div id="focuswrap"><label class="f"><span>Focus dimensions for this walkthrough</span></label>' +
+      '<div class="chips" style="padding-bottom:12px">' + ATOT.map(d =>
+        '<button type="button" id="fd_' + d.key + '" class="' +
+        (S.settings.quickDims.indexOf(d.key) >= 0 ? "on" : "") + '" onclick="this.classList.toggle(\'on\')">' +
+        esc(d.short) + "</button>").join("") + "</div></div>" +
+    '<button class="btn pri full" onclick="beginCapture(\'' + teacherId + '\')">Begin</button>');
+  const sel = document.getElementById("n_mode");
+  sel.onchange = () => {
+    document.getElementById("focuswrap").style.display = sel.value === "full" ? "none" : "";
+  };
+}
+async function beginCapture(teacherId) {
+  const t = staffById(teacherId);
+  const mode = val("n_mode");
+  const focus = mode === "full" ? ATOT.map(d => d.key) :
+    ATOT.filter(d => { const b = document.getElementById("fd_" + d.key); return b && b.classList.contains("on"); })
+      .map(d => d.key);
+  S.draft = { id: "draft", visitId: uid(), teacherId: teacherId,
+    teacherName: t ? t.name : "", gradeSubject: val("n_subject") || (t ? t.assignment : ""),
+    period: val("n_period"), studentCount: parseInt(val("n_count") || "0", 10) || "",
+    date: val("n_date") || todayISO(), mode: mode,
+    focusDims: focus.length ? focus : ATOT.map(d => d.key),
+    scores: {}, teacherActions: {}, studentActions: {},
+    checks: { room: {}, systems: {}, safety: {} }, notes: [],
+    strengths: "", growth: "", nextSteps: "",
+    observerName: S.settings.observerName, school: S.settings.school,
+    startedAt: Date.now(), elapsed: 0, running: true, section: "atot", openDim: focus[0] || "CC",
+    createdAt: now() };
+  if (mode === "quick") { S.settings.quickDims = focus; await saveSettings(); }
+  _pending = "";
+  await dbPut("meta", S.draft);
+  closeSheet(); location.hash = "#/capture";
+}
+async function saveDraft() { if (S.draft) await dbPut("meta", S.draft); }
+async function discardDraft() {
+  S.draft = null; _pending = ""; await dbDel("meta", "draft"); toast("Discarded"); route();
+}
+
+/* ==============================================================
+   VIEW: CAPTURE
+   ============================================================== */
+let _tick = null, _pending = "";
+function elapsed() {
+  const d = S.draft; if (!d) return 0;
+  return d.elapsed + (d.running ? (Date.now() - d.startedAt) / 1000 : 0);
+}
+const SECTIONS = [
+  ["atot",    "ATOT"],
+  ["actions", "Actions"],
+  ["room",    "Room"],
+  ["systems", "Systems"],
+  ["safety",  "Safety"],
+  ["notes",   "Notes"],
+  ["wrap",    "Wrap up"]
+];
+function sectionDone(key) {
+  const d = S.draft;
+  if (key === "atot") return Object.keys(d.scores).length > 0;
+  if (key === "actions") return Object.keys(d.teacherActions).length + Object.keys(d.studentActions).length > 0;
+  if (key === "notes") return d.notes.length > 0;
+  if (key === "wrap") return !!(d.strengths || d.growth || d.nextSteps);
+  if (CHECKLISTS[key]) return Object.keys(d.checks[key] || {}).length > 0;
+  return false;
+}
+function viewCapture() {
+  const d = S.draft;
+  if (!d || !d.teacherId) { location.hash = "#/new"; return; }
+  const target = d.mode === "full" ? 20 : 5;
+  setHeader(d.teacherName || sName(d.teacherId),
+    (d.mode === "full" ? "Full ATOT" : "Walkthrough") + " · " + fmtDate(d.date), backBtn,
+    '<button onclick="finishSheet()">Finish</button>');
+
+  const mins = elapsed() / 60;
+  let h = '<div class="timer"><div class="grow"><div class="clock" id="clk">' + mmss(elapsed()) + "</div>" +
+    '<div style="font-size:11px;opacity:.75;margin-top:2px">' +
+    (d.running ? "Recording" : "Paused") + " · target " + target + " min" +
+    (mins > target ? " · over" : "") + "</div></div>" +
+    '<button onclick="toggleTimer()">' + (d.running ? "Pause" : "Resume") + "</button></div>";
+
+  const visible = SECTIONS.filter(s => {
+    if (CHECKLISTS[s[0]]) return S.settings.sections[s[0]] !== false;
+    if (s[0] === "actions") return S.settings.sections.actions !== false;
+    return true;
+  });
+  h += '<div class="chips">' + visible.map(s =>
+    '<button class="' + (d.section === s[0] ? "on" : "") + '" onclick="setSection(\'' + s[0] + '\')">' +
+    esc(s[1]) + (sectionDone(s[0]) ? '<span class="dot"></span>' : "") + "</button>").join("") + "</div>";
+
+  h += '<div id="sect">' + sectionHTML(d.section) + "</div>";
+  h += '<div class="btnrow" style="margin-top:15px">' +
+    '<button class="btn dan" onclick="confirmDiscard()">Discard</button>' +
+    '<button class="btn pri" onclick="finishSheet()">Finish</button></div>';
+  document.getElementById("app").innerHTML = h;
+  startTick();
+}
+function startTick() {
+  clearInterval(_tick);
+  _tick = setInterval(() => {
+    const c = document.getElementById("clk");
+    if (!c || !S.draft) { clearInterval(_tick); return; }
+    c.textContent = mmss(elapsed());
+  }, 1000);
+}
+async function toggleTimer() {
+  const d = S.draft; if (!d) return;
+  if (d.running) { d.elapsed = elapsed(); d.running = false; } else { d.startedAt = Date.now(); d.running = true; }
+  await saveDraft(); viewCapture();
+}
+async function setSection(k) { S.draft.section = k; await saveDraft(); viewCapture(); }
+function refreshSection() {
+  const el = document.getElementById("sect");
+  if (el) el.innerHTML = sectionHTML(S.draft.section);
+  document.querySelectorAll(".chips button").forEach((b, i) => {
+    const key = SECTIONS.filter(s => CHECKLISTS[s[0]] ? S.settings.sections[s[0]] !== false :
+      s[0] === "actions" ? S.settings.sections.actions !== false : true)[i];
+    if (!key) return;
+    const dot = b.querySelector(".dot");
+    if (sectionDone(key[0]) && !dot) b.insertAdjacentHTML("beforeend", '<span class="dot"></span>');
+  });
+}
+function sectionHTML(k) {
+  if (k === "atot") return atotHTML();
+  if (k === "actions") return actionsHTML();
+  if (CHECKLISTS[k]) return checklistHTML(k);
+  if (k === "notes") return notesHTML();
+  if (k === "wrap") return wrapHTML();
+  return "";
+}
+function atotHTML() {
+  const d = S.draft;
+  const dims = ATOT.filter(x => d.focusDims.indexOf(x.key) >= 0);
+  let h = '<div class="legend"><span><b>4</b> Very Evident (&gt;75%)</span>' +
+    '<span><b>3</b> Evident (51–74%)</span><span><b>2</b> Somewhat (25–50%)</span>' +
+    '<span><b>1</b> Not Evident (&lt;25%)</span><span><b>—</b> not observed</span></div>';
+  if (d.mode === "quick" && dims.length < ATOT.length)
+    h += '<div class="mini muted" style="margin-bottom:9px">Focused walkthrough — rating ' +
+      dims.length + " of 5 dimensions. <a onclick=\"expandAll()\" style=\"cursor:pointer\">Show all</a></div>";
+  dims.forEach(dim => {
+    const rated = dim.items.filter((_, i) => d.scores[dim.key + (i + 1)] > 0).length;
+    const open = d.openDim === dim.key;
+    h += '<div class="dim"><div class="dimhead ' + (open ? "open" : "") + '" onclick="toggleDim(\'' + dim.key + '\')">' +
+      '<div class="nm">' + esc(dim.name) + "</div>" +
+      '<div class="ct">' + rated + "/" + dim.items.length + "</div>" +
+      '<div class="car">' + (open ? "▾" : "▸") + "</div></div>";
+    if (open) {
+      h += '<div class="dimbody"><div class="mini muted" style="padding:9px 0 3px;line-height:1.5">' +
+        esc(dim.desc) + "</div>";
+      dim.items.forEach((txt, i) => {
+        const code = dim.key + (i + 1), cur = d.scores[code];
+        h += '<div class="ind"><div class="q"><b>' + code + "</b> " + esc(txt) + "</div>" +
+          '<div class="scale">' +
+          [1, 2, 3, 4].map(n => '<button class="' + (cur === n ? "on" : "") + '" onclick="rate(\'' +
+            code + "'," + n + ')">' + n + "</button>").join("") +
+          '<button class="na ' + (cur === 0 ? "on na" : "na") + '" onclick="rate(\'' + code +
+          '\',0)">—</button></div></div>';
+      });
+      h += "</div>";
+    }
+    h += "</div>";
+  });
+  return h;
+}
+async function toggleDim(k) { S.draft.openDim = S.draft.openDim === k ? "" : k; await saveDraft(); refreshSection(); }
+async function expandAll() { S.draft.focusDims = ATOT.map(d => d.key); await saveDraft(); refreshSection(); }
+async function rate(code, n) {
+  const d = S.draft;
+  if (d.scores[code] === n) delete d.scores[code]; else d.scores[code] = n;
+  await saveDraft(); refreshSection();
+}
+function actionsHTML() {
+  const d = S.draft;
+  const tot = k => (k === "t" ? TEACHER_ACTIONS : STUDENT_ACTIONS)
+    .reduce((n, a) => n + ((k === "t" ? d.teacherActions : d.studentActions)[a[0]] || 0), 0);
+  const sT = tot("s"), off = d.studentActions.s_off || 0;
+  let h = '<p class="mini muted" style="margin:0 0 10px;line-height:1.5">Tap what you see. Tap again to ' +
+    "count it a second time. The two columns side by side show who is doing the cognitive work.</p>";
+  if (sT) h += '<div class="card" style="padding:11px"><div class="row between">' +
+    '<div class="tiny muted">Student engagement</div><div style="font-weight:700;font-variant-numeric:tabular-nums">' +
+    Math.round((sT - off) / sT * 100) + "%</div></div>" +
+    '<div class="track" style="height:10px;background:var(--grid);border-radius:4px;overflow:hidden;margin-top:7px">' +
+    '<div style="height:100%;background:var(--series-1);border-radius:4px;width:' +
+    ((sT - off) / sT * 100).toFixed(0) + '%"></div></div>' +
+    '<div class="mini muted" style="margin-top:5px">' + (sT - off) + " of " + sT +
+    " observations were on task</div></div>";
+  h += '<div class="tally2">' +
+    '<div class="tcol"><h4>Teacher is…</h4>' + TEACHER_ACTIONS.map(a =>
+      '<button class="tallybtn ' + (d.teacherActions[a[0]] ? "hit" : "") + '" onclick="tally(\'t\',\'' + a[0] + '\')">' +
+      '<span class="lb">' + esc(a[1]) + "</span>" +
+      (d.teacherActions[a[0]] ? '<span class="n">' + d.teacherActions[a[0]] + "</span>" : "") +
+      "</button>").join("") + "</div>" +
+    '<div class="tcol"><h4>Students are…</h4>' + STUDENT_ACTIONS.map(a =>
+      '<button class="tallybtn ' + (d.studentActions[a[0]] ? "hit" : "") + '" onclick="tally(\'s\',\'' + a[0] + '\')">' +
+      '<span class="lb">' + esc(a[1]) + "</span>" +
+      (d.studentActions[a[0]] ? '<span class="n">' + d.studentActions[a[0]] + "</span>" : "") +
+      "</button>").join("") + "</div></div>" +
+    '<button class="btn sm full" style="margin-top:10px" onclick="clearTallies()">Clear tallies</button>';
+  return h;
+}
+async function tally(which, key) {
+  const o = which === "t" ? S.draft.teacherActions : S.draft.studentActions;
+  o[key] = (o[key] || 0) + 1;
+  await saveDraft(); refreshSection();
+}
+async function clearTallies() {
+  S.draft.teacherActions = {}; S.draft.studentActions = {};
+  await saveDraft(); refreshSection();
+}
+function checklistHTML(k) {
+  const d = S.draft, cl = CHECKLISTS[k], ans = d.checks[k] || {};
+  const answered = cl.items.filter(it => ans[it[0]] !== undefined);
+  const yes = answered.filter(it => ans[it[0]] === true).length;
+  let h = '<p class="mini muted" style="margin:0 0 10px;line-height:1.5">Tap once for <b>yes</b>, ' +
+    "again for <b>no</b>, again to clear. Anything left blank is treated as not observed.</p>";
+  if (answered.length) h += '<div class="card" style="padding:11px"><div class="row between">' +
+    '<div class="tiny muted">' + esc(cl.name) + "</div>" +
+    '<div style="font-weight:700">' + yes + "/" + answered.length + "</div></div></div>";
+  h += '<div class="card">' + cl.items.map(it => {
+    const v = ans[it[0]];
+    return '<div class="ck ' + (v === true ? "yes" : v === false ? "no" : "") + '" onclick="check(\'' +
+      k + "','" + it[0] + '\')"><div class="bx">' + (v === false ? "✕" : "✓") + "</div>" +
+      '<div class="tx">' + esc(it[1]) + "</div></div>";
+  }).join("") + "</div>";
+  return h;
+}
+async function check(list, key) {
+  const c = S.draft.checks[list] = S.draft.checks[list] || {};
+  if (c[key] === undefined) c[key] = true;
+  else if (c[key] === true) c[key] = false;
+  else delete c[key];
+  await saveDraft(); refreshSection();
+}
+function notesHTML() {
+  const d = S.draft;
+  let h = '<div class="card"><label class="f" style="margin-bottom:8px"><span>Timestamped evidence note</span>' +
+    '<textarea id="ntxt" oninput="_pending=this.value" style="min-height:70px" ' +
+    'placeholder="Quote what was said, describe what was done. Evidence, not judgment.">' +
+    esc(_pending) + "</textarea></label>" +
+    '<div class="chips" style="padding-bottom:8px">' +
+    ["S1","S2","S3","Teacher said","Student said","Strength","Concern","Ask about"].map(q =>
+      '<button onclick="quick(' + JSON.stringify(q).replace(/"/g, "&quot;") + ')">' + esc(q) + "</button>").join("") +
+    "</div><button class='btn pri full' onclick='addNote()'>Add note</button></div>";
+  if (d.notes.length) h += '<div class="sect">Evidence log · ' + d.notes.length + "</div><div class=\"card\">" +
+    d.notes.slice().reverse().map(n => '<div class="note"><div class="stamp">' + mmss(n.at) + "</div>" +
+      '<div class="body">' + esc(n.text) + "</div>" +
+      '<div class="x" onclick="delNote(\'' + n.id + '\')">✕</div></div>').join("") + "</div>";
+  return h;
+}
+function quick(t) {
+  const el = document.getElementById("ntxt");
+  el.value = el.value ? el.value.replace(/\s*$/, "") + " " + t + " " : t + ": ";
+  _pending = el.value; el.focus(); el.setSelectionRange(el.value.length, el.value.length);
+}
+function addNote() {
+  const el = document.getElementById("ntxt"), raw = el.value.trim();
+  if (!raw) return toast("Nothing to add");
+  guard(raw, async function (clean) {
+    S.draft.notes.push({ id: uid(), at: elapsed(), text: clean });
+    _pending = ""; await saveDraft(); refreshSection(); toast("Noted");
+  });
+}
+async function delNote(id) {
+  S.draft.notes = S.draft.notes.filter(n => n.id !== id);
+  await saveDraft(); refreshSection();
+}
+function wrapHTML() {
+  const d = S.draft;
+  const lowest = INDICATORS.filter(i => d.scores[i.code] > 0)
+    .sort((a, b) => d.scores[a.code] - d.scores[b.code]).slice(0, 3);
+  const highest = INDICATORS.filter(i => d.scores[i.code] > 0)
+    .sort((a, b) => d.scores[b.code] - d.scores[a.code]).slice(0, 3);
+  let h = "";
+  if (highest.length) {
+    h += '<div class="card"><div class="mini muted" style="font-weight:700;text-transform:uppercase;' +
+      'letter-spacing:.05em;margin-bottom:7px">Strongest this visit</div>' +
+      highest.map(i => '<div class="tiny" style="padding:3px 0">' +
+        '<b style="color:var(--series-1)">' + d.scores[i.code] + "</b> " + esc(i.text) + "</div>").join("") +
+      '<div class="hr"></div><div class="mini muted" style="font-weight:700;text-transform:uppercase;' +
+      'letter-spacing:.05em;margin-bottom:7px">Lowest this visit</div>' +
+      lowest.map(i => '<div class="tiny" style="padding:3px 0">' +
+        '<b style="color:var(--series-1)">' + d.scores[i.code] + "</b> " + esc(i.text) + "</div>").join("") +
+      "</div>";
+  }
+  h += '<div class="card">' +
+    '<label class="f"><span>Strength to name for the teacher</span>' +
+      '<textarea id="w_str" onchange="wrapSave(\'strengths\',this.value)">' + esc(d.strengths) + "</textarea></label>" +
+    '<label class="f"><span>Growth area</span><textarea id="w_gro" onchange="wrapSave(\'growth\',this.value)">' +
+      esc(d.growth) + "</textarea></label>" +
+    '<label class="f" style="margin-bottom:0"><span>Next step / follow-up</span>' +
+      '<textarea id="w_nxt" onchange="wrapSave(\'nextSteps\',this.value)" ' +
+      'placeholder="Small, observable, and dated.">' + esc(d.nextSteps) + "</textarea></label></div>";
+  return h;
+}
+function wrapSave(k, v) {
+  guard(v, async function (clean) {
+    S.draft[k] = clean; await saveDraft();
+    const map = { strengths: "w_str", growth: "w_gro", nextSteps: "w_nxt" };
+    const el = document.getElementById(map[k]); if (el) el.value = clean;
+  });
+}
+function confirmDiscard() {
+  confirmSheet("Discard this observation?", "Everything captured will be lost.", "Discard", discardDraft);
+}
+function finishSheet() {
+  const d = S.draft; if (!d) return;
+  const rated = Object.values(d.scores).filter(x => x > 0);
+  const ov = rated.length ? round1(rated.reduce((a, b) => a + b, 0) / rated.length) : null;
+  sheet("Finish observation",
+    '<div class="card" style="box-shadow:none;margin-bottom:13px"><div class="row between">' +
+    '<div><div class="mini muted">Indicators rated</div><div style="font-weight:700;font-size:18px">' +
+      rated.length + "/" + (d.mode === "full" ? INDICATORS.length :
+        ATOT.filter(x => d.focusDims.indexOf(x.key) >= 0).reduce((n, x) => n + x.items.length, 0)) + "</div></div>" +
+    '<div style="text-align:center"><div class="mini muted">Overall</div>' +
+      '<div style="font-weight:700;font-size:18px">' + (ov !== null ? ov.toFixed(1) : "—") + "</div></div>" +
+    '<div style="text-align:right"><div class="mini muted">Notes</div>' +
+      '<div style="font-weight:700;font-size:18px">' + d.notes.length + "</div></div></div></div>" +
+    '<label class="f"><span>Minutes in the room</span><input type="number" id="f_min" min="0" value="' +
+      Math.max(1, Math.round(elapsed() / 60)) + '"></label>' +
+    (S.settings.atotCountsAsTime ? '<p class="mini muted" style="margin:-4px 0 10px">These minutes are ' +
+      "added to your time log as <b>Instructional Leader</b>.</p>" : "") +
+    '<p class="mini muted" style="margin:0 0 12px">Saved on this device' +
+      (S.settings.sheetUrl ? " and sent to your Google Sheet." : ". Connect a Sheet in Settings to roll these up.") +
+      "</p>" +
+    '<button class="btn pri full" onclick="finishVisit()">Save observation</button>');
+}
+async function finishVisit() {
+  const d = S.draft; if (!d) return;
+  const mins = parseInt(val("f_min") || "0", 10) || Math.round(elapsed() / 60);
+  const v = {
+    id: d.visitId, teacherId: d.teacherId, teacherName: d.teacherName,
+    gradeSubject: d.gradeSubject, period: d.period, studentCount: d.studentCount,
+    date: d.date, mode: d.mode, focusDims: d.focusDims,
+    scores: d.scores, teacherActions: d.teacherActions, studentActions: d.studentActions,
+    checks: d.checks, notes: d.notes,
+    strengths: d.strengths, growth: d.growth, nextSteps: d.nextSteps,
+    observerName: d.observerName || S.settings.observerName, school: d.school || S.settings.school,
+    durationSec: mins * 60, createdAt: d.createdAt, syncState: "pending"
+  };
+  await dbPut("visits", v);
+  const i = S.visits.findIndex(x => x.id === v.id);
+  if (i >= 0) S.visits[i] = v; else S.visits.push(v);
+  const logged = await upsertAtotTime(v);
+  S.draft = null; _pending = ""; await dbDel("meta", "draft");
+  clearInterval(_tick); closeSheet();
+  toast(logged ? "Saved · " + mins + " min logged as Instructional Leader" : "Observation saved");
+  location.hash = "#/visit/" + v.id;
+  if (S.settings.autoSync) setTimeout(() => syncNow(false), 400);
+}
+
+/* ==============================================================
+   VIEW: VISIT DETAIL
+   ============================================================== */
+function viewVisit(id) {
+  const v = S.visits.find(x => x.id === id);
+  if (!v) { location.hash = "#/home"; return; }
+  setHeader(v.teacherName || sName(v.teacherId),
+    (v.mode === "full" ? "Full ATOT" : "Walkthrough") + " · " + fmtDate(v.date), backBtn,
+    '<button onclick="shareVisit(\'' + id + '\')">Share</button>');
+
+  const rows = ATOT.map(d => {
+    const vals = d.items.map((_, i) => v.scores[d.key + (i + 1)]).filter(x => x > 0);
+    return { label: d.short, value: vals.length ? round1(vals.reduce((a, b) => a + b, 0) / vals.length) : 0,
+      n: vals.length };
+  }).filter(r => r.n);
+  const ov = overallOf(v);
+
+  let h = '<div class="card"><div class="row between">' +
+    '<div><div class="mini muted">Overall</div><div style="font-weight:700;font-size:20px">' +
+      (ov !== null ? ov.toFixed(1) : "—") + "</div></div>" +
+    '<div style="text-align:center"><div class="mini muted">Minutes</div>' +
+      '<div style="font-weight:700;font-size:20px">' + Math.round((v.durationSec || 0) / 60) + "</div></div>" +
+    '<div style="text-align:center"><div class="mini muted">Rated</div>' +
+      '<div style="font-weight:700;font-size:20px">' +
+      Object.values(v.scores).filter(x => x > 0).length + "</div></div>" +
+    '<div style="text-align:right"><div class="mini muted">Notes</div>' +
+      '<div style="font-weight:700;font-size:20px">' + (v.notes || []).length + "</div></div></div>" +
+    (v.period || v.studentCount ? '<div class="hr"></div><div class="mini muted">' +
+      (v.period ? "Period " + esc(v.period) : "") +
+      (v.studentCount ? (v.period ? " · " : "") + v.studentCount + " students present" : "") + "</div>" : "") +
+    "</div>";
+
+  if (rows.length) h += '<div class="sect">By dimension</div><div class="card">' +
+    barChart(rows, 4, "Scale: 1 Not Evident to 4 Very Evident") + "</div>";
+
+  if (v.strengths || v.growth || v.nextSteps) {
+    h += '<div class="sect">Feedback</div><div class="card">';
+    if (v.strengths) h += '<div class="mini muted" style="font-weight:700">STRENGTH</div>' +
+      '<div class="tiny" style="white-space:pre-wrap;margin-bottom:9px">' + esc(v.strengths) + "</div>";
+    if (v.growth) h += '<div class="mini muted" style="font-weight:700">GROWTH AREA</div>' +
+      '<div class="tiny" style="white-space:pre-wrap;margin-bottom:9px">' + esc(v.growth) + "</div>";
+    if (v.nextSteps) h += '<div class="mini muted" style="font-weight:700">NEXT STEP</div>' +
+      '<div class="tiny" style="white-space:pre-wrap">' + esc(v.nextSteps) + "</div>";
+    h += "</div>";
+  }
+
+  const tAct = TEACHER_ACTIONS.filter(a => v.teacherActions[a[0]]);
+  const sAct = STUDENT_ACTIONS.filter(a => v.studentActions[a[0]]);
+  if (tAct.length || sAct.length) {
+    h += '<div class="sect">What people were doing</div><div class="card"><div class="tally2">' +
+      '<div class="tcol"><h4>Teacher</h4>' + tAct.sort((a, b) => v.teacherActions[b[0]] - v.teacherActions[a[0]])
+        .map(a => '<div class="tiny" style="padding:3px 0"><b>' + v.teacherActions[a[0]] + "</b> " +
+          esc(a[1]) + "</div>").join("") + "</div>" +
+      '<div class="tcol"><h4>Students</h4>' + sAct.sort((a, b) => v.studentActions[b[0]] - v.studentActions[a[0]])
+        .map(a => '<div class="tiny" style="padding:3px 0"><b>' + v.studentActions[a[0]] + "</b> " +
+          esc(a[1]) + "</div>").join("") + "</div></div></div>";
+  }
+
+  const concerns = [];
+  Object.keys(CHECKLISTS).forEach(k => CHECKLISTS[k].items.forEach(it => {
+    if (v.checks[k] && v.checks[k][it[0]] === false) concerns.push([CHECKLISTS[k].name, it[1]]);
+  }));
+  if (concerns.length) {
+    h += '<div class="sect">Flagged — needs follow-up</div><div class="card">' +
+      concerns.map(c => '<div class="tiny" style="padding:5px 0;display:flex;gap:8px">' +
+        '<span style="color:var(--bad);font-weight:700;flex:none">✕</span><span>' + esc(c[1]) +
+        ' <span class="mini muted">(' + esc(c[0]) + ")</span></span></div>").join("") + "</div>";
+  }
+  Object.keys(CHECKLISTS).forEach(k => {
+    const cl = CHECKLISTS[k], ans = cl.items.filter(it => v.checks[k] && v.checks[k][it[0]] !== undefined);
+    if (!ans.length) return;
+    const yes = ans.filter(it => v.checks[k][it[0]] === true).length;
+    h += '<div class="card" style="padding:11px"><div class="row between">' +
+      '<div class="tiny">' + esc(cl.icon) + " " + esc(cl.name) + "</div>" +
+      '<div class="tiny" style="font-weight:700">' + yes + "/" + ans.length + "</div></div></div>";
+  });
+
+  if ((v.notes || []).length) h += '<div class="sect">Evidence log</div><div class="card">' +
+    v.notes.map(n => '<div class="note"><div class="stamp">' + mmss(n.at) + "</div>" +
+      '<div class="body">' + esc(n.text) + "</div></div>").join("") + "</div>";
+
+  h += '<div class="card" style="padding:11px"><div class="row between tiny">' +
+    "<div class='muted'>Google Sheet</div><div>" +
+    (v.syncState === "synced" ? '<span class="pill ok">sent ' + agoLabel(v.syncedAt) + "</span>" :
+      v.syncState === "error" ? '<span class="pill bad">failed</span>' :
+      '<span class="pill warn">pending</span>') + "</div></div>" +
+    (v.syncState === "error" && v.syncError ? '<div class="mini muted" style="margin-top:6px">' +
+      esc(v.syncError) + "</div>" : "") +
+    (v.syncState !== "synced" && S.settings.sheetUrl ?
+      '<button class="btn sm full" style="margin-top:9px" onclick="syncNow(true)">Try sending again</button>' : "") +
+    "</div>";
+
+  h += '<div class="btnrow" style="margin-top:16px">' +
+    '<button class="btn" onclick="location.hash=\'#/teacher/' + v.teacherId + '\'">Teacher</button>' +
+    '<button class="btn dan" onclick="delVisit(\'' + id + '\')">Delete</button></div>';
+  document.getElementById("app").innerHTML = h;
+}
+function delVisit(id) {
+  confirmSheet("Delete this observation?",
+    "It is removed from this device, along with the Instructional Leader minutes it logged. " +
+    "A row already sent to the Observations tab stays there.", "Delete", async () => {
+      await dbDel("visits", id); S.visits = S.visits.filter(v => v.id !== id);
+      await removeAtotTime(id);
+      toast("Deleted"); location.hash = "#/home";
+    });
+}
+function visitToText(v) {
+  const L = [];
+  L.push((v.teacherName || sName(v.teacherId)) + " — " + (v.mode === "full" ? "Full ATOT observation" : "Walkthrough"));
+  L.push(fmtDate(v.date) + " · " + Math.round((v.durationSec || 0) / 60) + " min" +
+    (v.observerName ? " · " + v.observerName : ""));
+  L.push("");
+  ATOT.forEach(d => {
+    const rated = d.items.map((t, i) => ({ t: t, s: v.scores[d.key + (i + 1)] })).filter(x => x.s > 0);
+    if (!rated.length) return;
+    const avg = round1(rated.reduce((a, b) => a + b.s, 0) / rated.length);
+    L.push(d.name.toUpperCase() + "  (avg " + avg.toFixed(1) + ")");
+    rated.forEach(x => L.push("  " + x.s + "  " + x.t));
+    L.push("");
+  });
+  if (v.strengths) { L.push("STRENGTH"); L.push("  " + v.strengths); L.push(""); }
+  if (v.growth) { L.push("GROWTH AREA"); L.push("  " + v.growth); L.push(""); }
+  if (v.nextSteps) { L.push("NEXT STEP"); L.push("  " + v.nextSteps); L.push(""); }
+  const concerns = [];
+  Object.keys(CHECKLISTS).forEach(k => CHECKLISTS[k].items.forEach(it => {
+    if (v.checks[k] && v.checks[k][it[0]] === false) concerns.push(it[1]);
+  }));
+  if (concerns.length) { L.push("FLAGGED"); concerns.forEach(c => L.push("  ✕ " + c)); L.push(""); }
+  if ((v.notes || []).length) { L.push("EVIDENCE"); v.notes.forEach(n => L.push("  " + mmss(n.at) + "  " + n.text)); }
+  L.push(""); L.push("Rating scale: 4 Very Evident, 3 Evident, 2 Somewhat Evident, 1 Not Evident.");
+  L.push("Contains no student-identifying information.");
+  return L.join("\n");
+}
+async function shareVisit(id) {
+  const v = S.visits.find(x => x.id === id);
+  const text = visitToText(v);
+  if (navigator.share) { try { await navigator.share({ title: "Observation summary", text: text }); return; } catch (e) {} }
+  try { await navigator.clipboard.writeText(text); toast("Summary copied"); }
+  catch (e) { sheet("Observation summary",
+    '<textarea style="min-height:300px;font-size:13px">' + esc(text) + "</textarea>"); }
+}
+
+/* ==============================================================
+   VIEW: REPORTS
+   ============================================================== */
+let reportRange = 90;
+function viewReports() {
+  setHeader("Reports", "Building-wide patterns");
+  const inRange = S.visits.filter(v => { const d = daysAgo(v.date); return d !== null && d <= reportRange; });
+  let h = '<div class="chips">' + [[30, "30 days"], [90, "90 days"], [180, "Semester"], [3650, "All"]]
+    .map(r => '<button class="' + (reportRange === r[0] ? "on" : "") + '" onclick="reportRange=' + r[0] +
+      ';viewReports()">' + r[1] + "</button>").join("") + "</div>";
+
+  if (!inRange.length) {
+    h += '<div class="card"><div class="empty"><span class="big">▥</span>' +
+      "No observations in this range yet.</div></div>";
+    document.getElementById("app").innerHTML = h; return;
+  }
+  const active = S.staff.filter(t => t.status !== "inactive");
+  const seen = new Set(inRange.map(v => v.teacherId));
+  const totalMin = inRange.reduce((n, v) => n + Math.round((v.durationSec || 0) / 60), 0);
+
+  h += '<div class="stats">' +
+    '<div class="stat"><div class="n">' + inRange.length + '</div><div class="l">Visits</div></div>' +
+    '<div class="stat"><div class="n">' + seen.size + "/" + active.length + '</div><div class="l">Teachers seen</div></div>' +
+    '<div class="stat"><div class="n">' + totalMin + '</div><div class="l">Minutes</div></div></div>';
+
+  /* dimension averages — single series, one hue */
+  const dimRows = ATOT.map(d => {
+    const all = [];
+    inRange.forEach(v => d.items.forEach((_, i) => { const s = v.scores[d.key + (i + 1)]; if (s > 0) all.push(s); }));
+    return { label: d.short, value: all.length ? round1(all.reduce((a, b) => a + b, 0) / all.length) : 0, n: all.length };
+  }).filter(r => r.n);
+  if (dimRows.length) h += '<div class="sect">Average by ATOT dimension</div><div class="card">' +
+    barChart(dimRows, 4, "Scale: 1 Not Evident to 4 Very Evident. Bars show the mean of every rating in range.") +
+    "</div>";
+
+  /* weakest indicators */
+  const indStats = INDICATORS.map(i => {
+    const vals = inRange.map(v => v.scores[i.code]).filter(x => x > 0);
+    return { code: i.code, text: i.text,
+      value: vals.length ? round1(vals.reduce((a, b) => a + b, 0) / vals.length) : 0, n: vals.length };
+  }).filter(x => x.n >= 2);
+  if (indStats.length) {
+    const low = indStats.slice().sort((a, b) => a.value - b.value).slice(0, 5);
+    const high = indStats.slice().sort((a, b) => b.value - a.value).slice(0, 5);
+    h += '<div class="sect">Lowest-rated indicators — where to put PD</div><div class="card">' +
+      barChart(low.map(x => ({ label: x.code, value: x.value })), 4) +
+      '<div class="hr"></div>' + low.map(x => '<div class="mini muted" style="padding:2px 0">' +
+        "<b>" + x.code + "</b> " + esc(x.text) + " · " + x.n + " ratings</div>").join("") + "</div>";
+    h += '<div class="sect">Strongest indicators — where to find your models</div><div class="card">' +
+      barChart(high.map(x => ({ label: x.code, value: x.value })), 4) +
+      '<div class="hr"></div>' + high.map(x => '<div class="mini muted" style="padding:2px 0">' +
+        "<b>" + x.code + "</b> " + esc(x.text) + " · " + x.n + " ratings</div>").join("") + "</div>";
+  }
+
+  /* engagement + checklists */
+  let sTot = 0, sOff = 0;
+  inRange.forEach(v => STUDENT_ACTIONS.forEach(a => {
+    const n = v.studentActions[a[0]] || 0; sTot += n; if (a[0] === "s_off") sOff += n;
+  }));
+  const ckRows = Object.keys(CHECKLISTS).map(k => {
+    let yes = 0, tot = 0;
+    inRange.forEach(v => CHECKLISTS[k].items.forEach(it => {
+      const a = v.checks[k] && v.checks[k][it[0]];
+      if (a !== undefined) { tot++; if (a === true) yes++; }
+    }));
+    return { label: CHECKLISTS[k].name, value: tot ? round1(yes / tot * 4) : 0, pct: tot ? Math.round(yes / tot * 100) : 0, n: tot };
+  }).filter(r => r.n);
+  if (sTot || ckRows.length) {
+    h += '<div class="sect">Environment &amp; engagement</div><div class="card">';
+    if (sTot) h += '<div class="row between" style="margin-bottom:9px">' +
+      '<div class="tiny muted">Student engagement across all visits</div>' +
+      '<div style="font-weight:700">' + Math.round((sTot - sOff) / sTot * 100) + "%</div></div>";
+    if (ckRows.length) h += '<table class="data"><tr><th>Checklist</th><th style="text-align:right">Met</th>' +
+      '<th style="text-align:right">Items</th></tr>' +
+      ckRows.map(r => "<tr><td>" + esc(r.label) + '</td><td class="n">' + r.pct + '%</td><td class="n">' +
+        r.n + "</td></tr>").join("") + "</table>";
+    h += "</div>";
+  }
+
+  /* coverage */
+  const unseen = active.filter(t => !seen.has(t.id));
+  h += '<div class="sect">Coverage</div><div class="card">';
+  if (unseen.length) {
+    h += '<div class="tiny" style="margin-bottom:7px"><b>' + unseen.length +
+      "</b> not observed in this range:</div>" +
+      unseen.map(t => '<div class="tiny muted" style="padding:2px 0">' + esc(t.name) +
+        " · last " + agoLabel(lastVisitFor(t.id)) + "</div>").join("");
+  } else h += '<div class="tiny">Every active teacher has been observed in this range.</div>';
+  h += "</div>";
+
+  h += '<button class="btn full" style="margin-top:12px" onclick="exportCSV()">Download CSV of all visits</button>';
+  document.getElementById("app").innerHTML = h;
+}
+
+/* ==============================================================
+   TIME LOG
+   One record per block of time: { id, date, category, minutes,
+   afterHours, note, source: "manual" | "atot", visitId }.
+   Minutes are whole numbers the principal enters. Walkthroughs add
+   their own Instructional Leader entry when they are finished.
+   ============================================================== */
+let timeDate = null;          // the day showing on the Time tab
+let monthKey = null;          // "YYYY-MM" showing on the Month view
+
+function fmtMin(m) {
+  m = Math.round(m || 0);
+  if (m < 60) return m + "m";
+  const h = Math.floor(m / 60), r = m % 60;
+  return h + "h" + (r ? " " + r + "m" : "");
+}
+function hrs(m) { return (Math.round((m || 0) / 60 * 100) / 100).toFixed(2); }
+function shiftDate(iso, n) {
+  const d = new Date(iso + "T12:00:00"); d.setDate(d.getDate() + n);
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+function isWeekend(iso) { const g = new Date(iso + "T12:00:00").getDay(); return g === 0 || g === 6; }
+function dayLabel(iso) {
+  return new Date(iso + "T12:00:00").toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+}
+function entriesOn(iso) {
+  return S.time.filter(e => e.date === iso).sort((a, b) => (a.createdAt || "").localeCompare(b.createdAt || ""));
+}
+function totalsOf(list) {
+  const t = { all: 0, after: 0 };
+  TIME_CATS.forEach(c => { t[c.key] = 0; });
+  list.forEach(e => { t[e.category] = (t[e.category] || 0) + e.minutes; t.all += e.minutes;
+    if (e.afterHours) t.after += e.minutes; });
+  return t;
+}
+function monthEntries(key) { return S.time.filter(e => (e.date || "").slice(0, 7) === key); }
+function monthName(key) {
+  return new Date(key + "-15T12:00:00").toLocaleDateString(undefined, { month: "long", year: "numeric" });
+}
+function shiftMonth(key, n) {
+  const d = new Date(key + "-15T12:00:00"); d.setMonth(d.getMonth() + n);
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
+}
+function daysInMonth(key) {
+  const y = +key.slice(0, 4), m = +key.slice(5, 7), n = new Date(y, m, 0).getDate(), out = [];
+  for (let i = 1; i <= n; i++) out.push(key + "-" + String(i).padStart(2, "0"));
+  return out;
+}
+/* Weekdays up to yesterday, within the last `back` days, with nothing logged. */
+function missingWeekdays(back) {
+  const out = [], today = todayISO();
+  /* don't nag about days before the app was in use */
+  const start = S.time.reduce((m, e) => e.date < m ? e.date : m, (S.settings.createdAt || now()).slice(0, 10));
+  for (let i = 1; i <= back; i++) {
+    const d = shiftDate(today, -i);
+    if (d >= start && !isWeekend(d) && !S.time.some(e => e.date === d)) out.push(d);
+  }
+  return out.reverse();
+}
+
+/* ---------- Sheet rows ---------- */
+function timeHeader() {
+  return ["EntryID", "Date", "Day", "Category", "Minutes", "Hours", "After Hours", "Source",
+    "Teacher", "Note", "Principal", "School", "Logged", "Updated"];
+}
+function timeRow(e) {
+  return [e.id, e.date, new Date(e.date + "T12:00:00").toLocaleDateString("en-US", { weekday: "short" }),
+    CAT[e.category] ? CAT[e.category].name : e.category, e.minutes, +hrs(e.minutes),
+    e.afterHours ? "Yes" : "No", e.source === "atot" ? "ATOT walkthrough" : "Manual",
+    e.teacherName || "", e.note || "", S.settings.observerName || "", S.settings.school || SCHOOL_NAME,
+    e.createdAt || "", e.updatedAt || ""];
+}
+
+/* ---------- store ---------- */
+async function putTime(e) {
+  e.updatedAt = now(); e.syncState = "pending";
+  await dbPut("time", e);
+  const i = S.time.findIndex(x => x.id === e.id);
+  if (i >= 0) S.time[i] = e; else S.time.push(e);
+  if (S.settings.autoSync && timeUrl()) setTimeout(() => syncNow(false), 300);
+}
+async function dropTime(id) {
+  const e = S.time.find(x => x.id === id);
+  if (!e) return;
+  await dbDel("time", id);
+  S.time = S.time.filter(x => x.id !== id);
+  if (e.syncedAt) { S.tomb.ids.push(id); await dbPut("meta", S.tomb); }   // remove the Sheet row too
+}
+async function upsertAtotTime(v) {
+  if (!S.settings.atotCountsAsTime) return false;
+  const mins = Math.round((v.durationSec || 0) / 60);
+  if (mins < 1) return false;
+  const cur = S.time.find(e => e.visitId === v.id);
+  const e = Object.assign(cur || { id: "t" + uid(), createdAt: now() }, {
+    date: v.date, category: "instructional", minutes: mins, afterHours: isWeekend(v.date),
+    note: (v.mode === "full" ? "Full ATOT observation" : "ATOT walkthrough") + " — " + (v.teacherName || ""),
+    teacherName: v.teacherName || "", source: "atot", visitId: v.id });
+  await putTime(e);
+  return true;
+}
+async function removeAtotTime(visitId) {
+  const e = S.time.find(x => x.visitId === visitId);
+  if (e) await dropTime(e.id);
+}
+
+/* ---------- HOME card ---------- */
+function homeTimeCard() {
+  const today = todayISO(), t = totalsOf(entriesOn(today));
+  const mt = totalsOf(monthEntries(today.slice(0, 7)));
+  const used = TIME_CATS.filter(c => t[c.key]);
+  let h = '<div class="card tap" onclick="timeDate=todayISO();location.hash=\'#/time\'">' +
+    '<div class="row between"><div><div class="mini muted" style="font-weight:700;text-transform:uppercase;' +
+    'letter-spacing:.05em">Time today</div><div style="font-size:24px;font-weight:700;letter-spacing:-.02em">' +
+    fmtMin(t.all) + "</div></div>" +
+    '<div style="text-align:right"><div class="mini muted">' + esc(monthName(today.slice(0, 7))) + "</div>" +
+    '<div style="font-weight:700;font-variant-numeric:tabular-nums">' + hrs(mt.all) + " hrs</div></div></div>";
+  if (used.length) h += '<div class="row" style="flex-wrap:wrap;gap:5px;margin-top:9px">' +
+    used.map(c => '<span class="pill flat">' + esc(c.name) + " " + fmtMin(t[c.key]) + "</span>").join("") + "</div>";
+  h += '<button class="btn pri full" style="margin-top:11px" onclick="event.stopPropagation();timeDate=todayISO();' +
+    'location.hash=\'#/time\'">Log time</button></div>';
+  const miss = missingWeekdays(10);
+  if (miss.length) h += '<div class="card" style="padding:11px"><div class="tiny" style="margin-bottom:6px">' +
+    "<b>No time logged</b> for " + miss.length + " recent weekday" + (miss.length === 1 ? "" : "s") + ":</div>" +
+    '<div class="row" style="flex-wrap:wrap;gap:5px">' + miss.map(d =>
+      '<button class="pill warn" style="border:0;cursor:pointer" onclick="timeDate=\'' + d +
+      '\';location.hash=\'#/time\'">' + esc(dayLabel(d)) + "</button>").join("") + "</div></div>";
+  return h;
+}
+
+/* ---------- VIEW: TIME (one day) ---------- */
+function viewTime() {
+  if (!timeDate) timeDate = todayISO();
+  setHeader("Time log", dayLabel(timeDate) + (isWeekend(timeDate) ? " · weekend" : ""), "",
+    '<button onclick="monthKey=timeDate.slice(0,7);location.hash=\'#/month\'">Month</button>');
+  const list = entriesOn(timeDate), t = totalsOf(list);
+  let h = '<div class="daynav"><button onclick="timeDate=shiftDate(timeDate,-1);viewTime()" aria-label="Previous day">‹</button>' +
+    '<input type="date" value="' + timeDate + '" onchange="if(this.value){timeDate=this.value;viewTime()}">' +
+    '<button onclick="timeDate=shiftDate(timeDate,1);viewTime()" aria-label="Next day">›</button></div>';
+  if (timeDate !== todayISO())
+    h += '<div style="text-align:center;margin:-4px 0 10px"><a class="tiny" style="cursor:pointer" ' +
+      'onclick="timeDate=todayISO();viewTime()">Back to today</a></div>';
+
+  h += '<div class="stats">' +
+    '<div class="stat"><div class="n">' + fmtMin(t.all) + '</div><div class="l">Logged</div></div>' +
+    '<div class="stat"><div class="n">' + list.length + '</div><div class="l">Entries</div></div>' +
+    '<div class="stat"><div class="n">' + fmtMin(t.after) + '</div><div class="l">After hours</div></div></div>';
+
+  h += '<div class="sect">Tap a category to add minutes</div><div class="catgrid">' +
+    TIME_CATS.map(c => '<button class="catbtn' + (t[c.key] ? " has" : "") + (c.key === "other" ? " wide" : "") +
+      '" onclick="entrySheet(null,\'' + c.key + '\')"><span class="cn">' + esc(c.name) + "</span>" +
+      '<span class="cm">' + (t[c.key] ? fmtMin(t[c.key]) + " today" : "+ add") + "</span></button>").join("") +
+    "</div>";
+
+  h += '<div class="sect">Entries · ' + dayLabel(timeDate) + "</div>";
+  h += list.length ? '<div class="card" style="padding:2px 13px">' + list.map(e =>
+    '<div class="entry" onclick="entrySheet(\'' + e.id + '\')"><div class="m">' + e.minutes + " min</div>" +
+    '<div class="b"><div style="font-weight:650">' + esc(CAT[e.category] ? CAT[e.category].name : e.category) + "</div>" +
+    (e.note ? '<div class="tiny muted" style="word-break:break-word">' + esc(e.note) + "</div>" : "") +
+    '<div class="row" style="gap:5px;margin-top:4px;flex-wrap:wrap">' +
+    (e.source === "atot" ? '<span class="pill">Walkthrough</span>' : "") +
+    (e.afterHours ? '<span class="pill flat">After hours</span>' : "") +
+    (timeUrl() ? (e.syncState === "synced" ? '<span class="pill ok">in Sheet</span>' :
+      e.syncState === "error" ? '<span class="pill bad">not sent</span>' : '<span class="pill warn">pending</span>') : "") +
+    "</div></div></div>").join("") + "</div>" :
+    '<div class="card"><div class="empty tiny" style="padding:18px">Nothing logged for this day.</div></div>';
+
+  const mt = totalsOf(monthEntries(timeDate.slice(0, 7)));
+  h += '<div class="card tap" style="margin-top:12px" onclick="monthKey=timeDate.slice(0,7);location.hash=\'#/month\'">' +
+    '<div class="row between"><div><div style="font-weight:650">' + esc(monthName(timeDate.slice(0, 7))) + "</div>" +
+    '<div class="tiny muted">' + hrs(mt.all) + " hours logged · totals and Excel export</div></div>" +
+    '<div style="font-size:19px;color:var(--brand)">›</div></div></div>';
+  document.getElementById("app").innerHTML = h;
+}
+
+/* ---------- add / edit an entry ---------- */
+function entrySheet(id, catKey) {
+  const e = id ? S.time.find(x => x.id === id) : null;
+  const cat = e ? e.category : (catKey || "instructional");
+  const date = e ? e.date : timeDate || todayISO();
+  const after = e ? !!e.afterHours : isWeekend(date);
+  window.__eid = id || null;
+  let h = "";
+  if (e && e.source === "atot") h += '<div class="warnbox soft" style="margin-bottom:12px"><h4>From a walkthrough</h4>' +
+    '<div class="tiny">Logged automatically when the observation was saved. You can adjust the minutes here.' +
+    (e.visitId && S.visits.some(v => v.id === e.visitId) ? ' <a style="cursor:pointer" onclick="closeSheet();' +
+      'location.hash=\'#/visit/' + e.visitId + '\'">Open the observation</a>' : "") + "</div></div>";
+  h += '<label class="f"><span>Category</span><select id="t_cat" onchange="catHint()">' +
+    TIME_CATS.map(c => '<option value="' + c.key + '"' + (c.key === cat ? " selected" : "") + ">" + esc(c.name) +
+      "</option>").join("") + '</select></label><div class="hint" id="t_hint"></div>' +
+    '<label class="f"><span>Minutes</span><input type="number" id="t_min" class="big-min" inputmode="numeric" ' +
+      'min="1" max="1440" value="' + (e ? e.minutes : "") + '" placeholder="0"></label>' +
+    '<div class="minchips">' + [5, 10, 15, 30, 45, 60].map(n =>
+      '<button type="button" onclick="addMin(' + n + ')">+' + n + "</button>").join("") +
+    '<button type="button" onclick="document.getElementById(\'t_min\').value=\'\'">Clear</button></div>' +
+    '<div class="row" style="gap:9px"><label class="f grow"><span>Or from</span>' +
+      '<input type="time" id="t_from" onchange="fromTo()"></label>' +
+      '<label class="f grow"><span>to</span><input type="time" id="t_to" onchange="fromTo()"></label></div>' +
+    '<label class="f"><span>Date</span><input type="date" id="t_date" value="' + date + '"></label>' +
+    '<label class="ack" style="margin-top:0"><input type="checkbox" id="t_after"' + (after ? " checked" : "") + ">" +
+      "<span><b>After hours / event</b> — before or after the school day, a game, a board meeting, a weekend.</span></label>" +
+    '<label class="f"><span id="t_notelab">Note</span><textarea id="t_note" style="min-height:62px" ' +
+      'placeholder="">' + esc(e ? e.note || "" : "") + "</textarea></label>" +
+    '<p class="mini muted" style="margin:-6px 0 12px">No student names — this goes to the superintendent.</p>' +
+    '<button class="btn pri full" onclick="saveEntry()">' + (e ? "Save changes" : "Add to " +
+      esc(dayLabel(date))) + "</button>" +
+    (e ? '<button class="btn dan full" style="margin-top:8px" onclick="delEntry(\'' + e.id + '\')">Delete entry</button>' : "");
+  sheet(e ? "Edit time" : "Log time", h);
+  catHint();
+}
+function catHint() {
+  const k = val("t_cat"), c = CAT[k];
+  document.getElementById("t_hint").textContent = c ? c.hint : "";
+  document.getElementById("t_notelab").textContent = k === "other" ? "Note — required for Other" : "Note (optional)";
+  document.getElementById("t_note").placeholder = k === "other" ? "What was it? A few words is enough." :
+    "Optional — e.g. parent conference, bus duty";
+}
+function addMin(n) {
+  const el = document.getElementById("t_min");
+  el.value = Math.min(1440, (parseInt(el.value || "0", 10) || 0) + n);
+}
+function fromTo() {
+  const a = val("t_from"), b = val("t_to");
+  if (!a || !b) return;
+  let m = hm(b) - hm(a);
+  if (m <= 0) m += 1440;                       // crossed midnight
+  document.getElementById("t_min").value = m;
+}
+function saveEntry() {
+  const id = window.__eid, cat = val("t_cat"), mins = parseInt(val("t_min") || "0", 10);
+  const date = val("t_date") || todayISO(), note = val("t_note");
+  if (!CAT[cat]) return toast("Pick a category");
+  if (!(mins >= 1)) return toast("Enter the minutes");
+  if (mins > 1440) return toast("That is more than a day");
+  if (cat === "other" && !note) return toast("Add a short note for Other");
+  const dayTot = S.time.filter(x => x.date === date && x.id !== id).reduce((n, x) => n + x.minutes, 0) + mins;
+  const after = document.getElementById("t_after").checked;
+  guard(note, async function (clean) {
+    const cur = id ? S.time.find(x => x.id === id) : null;
+    const e = Object.assign(cur ? Object.assign({}, cur) : { id: "t" + uid(), createdAt: now(), source: "manual" },
+      { date: date, category: cat, minutes: mins, afterHours: after, note: clean });
+    await putTime(e);
+    closeSheet();
+    timeDate = date;
+    toast((id ? "Updated" : "Added") + " · " + fmtMin(dayTot) + " logged " +
+      (date === todayISO() ? "today" : "on " + dayLabel(date)) + (dayTot > 900 ? " — check that total" : ""));
+    route();
+  });
+}
+function delEntry(id) {
+  const e = S.time.find(x => x.id === id);
+  confirmSheet("Delete this entry?", e.minutes + " min of " + CAT[e.category].name + " on " + dayLabel(e.date) +
+    " will be removed" + (e.syncedAt ? ", here and in the Sheet." : "."), "Delete", async () => {
+      await dropTime(id); toast("Deleted"); route();
+      if (S.settings.autoSync && timeUrl()) setTimeout(() => syncNow(false), 300);
+    });
+}
+
+/* ---------- VIEW: MONTH ---------- */
+function viewMonth() {
+  if (!monthKey) monthKey = todayISO().slice(0, 7);
+  setHeader(monthName(monthKey), "Monthly time totals", backBtn);
+  const list = monthEntries(monthKey), t = totalsOf(list);
+  const days = new Set(list.map(e => e.date));
+  let h = '<div class="daynav"><button onclick="monthKey=shiftMonth(monthKey,-1);viewMonth()" aria-label="Previous month">‹</button>' +
+    '<div class="grow" style="text-align:center;font-weight:650">' + esc(monthName(monthKey)) + "</div>" +
+    '<button onclick="monthKey=shiftMonth(monthKey,1);viewMonth()" aria-label="Next month">›</button></div>';
+  h += '<div class="stats">' +
+    '<div class="stat"><div class="n">' + hrs(t.all) + '</div><div class="l">Hours</div></div>' +
+    '<div class="stat"><div class="n">' + days.size + '</div><div class="l">Days logged</div></div>' +
+    '<div class="stat"><div class="n">' + hrs(t.after) + '</div><div class="l">After-hrs hrs</div></div></div>';
+  if (!list.length) {
+    h += '<div class="card"><div class="empty"><span class="big">◷</span>Nothing logged in ' +
+      esc(monthName(monthKey)) + ".</div></div>";
+  } else {
+    const max = Math.max.apply(null, TIME_CATS.map(c => t[c.key] / 60)) || 1;
+    h += '<div class="sect">Hours by category</div><div class="card">' +
+      barChart(TIME_CATS.map(c => ({ label: c.name, value: Math.round(t[c.key] / 60 * 10) / 10 })),
+        Math.ceil(max), "Hours. Share of the month's logged time is in the table below.") + "</div>";
+    h += '<div class="card" style="padding:6px 13px"><table class="data"><tr><th>Category</th>' +
+      '<th style="text-align:right">Minutes</th><th style="text-align:right">Hours</th><th style="text-align:right">%</th></tr>' +
+      TIME_CATS.map(c => "<tr><td>" + esc(c.name) + '</td><td class="n">' + t[c.key] + '</td><td class="n">' +
+        hrs(t[c.key]) + '</td><td class="n">' + (t.all ? (t[c.key] / t.all * 100).toFixed(1) : "0.0") + "</td></tr>").join("") +
+      '<tr><td><b>Total</b></td><td class="n">' + t.all + '</td><td class="n">' + hrs(t.all) +
+      '</td><td class="n">100.0</td></tr></table></div>';
+    const atot = list.filter(e => e.source === "atot").reduce((n, e) => n + e.minutes, 0);
+    if (atot) h += '<p class="mini muted" style="margin:-2px 2px 11px">Includes ' + fmtMin(atot) +
+      " of walkthrough time counted as Instructional Leader.</p>";
+  }
+  const start = S.time.reduce((m, e) => e.date < m ? e.date : m, (S.settings.createdAt || now()).slice(0, 10));
+  const miss = daysInMonth(monthKey).filter(d => d >= start && d < todayISO() && !isWeekend(d) && !days.has(d));
+  if (miss.length && list.length) h += '<div class="card" style="padding:11px"><div class="tiny" style="margin-bottom:6px">' +
+    "<b>" + miss.length + " weekday" + (miss.length === 1 ? "" : "s") + "</b> with nothing logged. " +
+    "Holidays and days out are fine to leave blank.</div>" +
+    '<div class="row" style="flex-wrap:wrap;gap:5px">' + miss.map(d =>
+      '<button class="pill flat" style="border:0;cursor:pointer" onclick="timeDate=\'' + d +
+      '\';location.hash=\'#/time\'">' + esc(dayLabel(d)) + "</button>").join("") + "</div></div>";
+
+  h += '<button class="btn pri full" style="margin-top:6px"' + (list.length ? "" : " disabled") +
+    ' onclick="exportMonth(false)">Download Excel for ' + esc(monthName(monthKey)) + "</button>";
+  if (navigator.canShare) h += '<button class="btn full" style="margin-top:8px"' + (list.length ? "" : " disabled") +
+    ' onclick="exportMonth(true)">Share or email the Excel file</button>';
+  h += '<p class="mini muted" style="margin:10px 2px 0;line-height:1.55">The workbook has three tabs: ' +
+    "<b>Summary</b> (minutes, hours, and percent by category, with the notes behind Other), <b>Daily</b> " +
+    "(every day of the month by category), and <b>Entries</b> (each entry as logged). Totals are live Excel formulas.</p>";
+  document.getElementById("app").innerHTML = h;
+}
+
+/* ==============================================================
+   EXCEL (.xlsx) — written directly, no library, works offline.
+   An .xlsx is a zip of XML parts; this stores them uncompressed.
+   Formulas carry cached values so previews (iPhone Files, Mail)
+   show the numbers before Excel recalculates.
+   ============================================================== */
+const CRC_T = (() => { const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; }
+  return t; })();
+function crc32(b) { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = CRC_T[(c ^ b[i]) & 255] ^ (c >>> 8);
+  return (c ^ 0xFFFFFFFF) >>> 0; }
+function zipStore(files) {          // files: [{name, data: Uint8Array}]
+  const enc = new TextEncoder(), parts = [], central = [];
+  let off = 0;
+  const u16 = n => [n & 255, (n >>> 8) & 255], u32 = n => [n & 255, (n >>> 8) & 255, (n >>> 16) & 255, (n >>> 24) & 255];
+  const DT = u16(0), DD = u16((2026 - 1980) << 9 | 1 << 5 | 1);
+  files.forEach(f => {
+    const nm = enc.encode(f.name), crc = crc32(f.data), sz = f.data.length;
+    const lh = new Uint8Array([0x50, 0x4b, 3, 4].concat(u16(20), u16(0x0800), u16(0), DT, DD, u32(crc), u32(sz), u32(sz),
+      u16(nm.length), u16(0)));
+    parts.push(lh, nm, f.data);
+    central.push(new Uint8Array([0x50, 0x4b, 1, 2].concat(u16(20), u16(20), u16(0x0800), u16(0), DT, DD, u32(crc),
+      u32(sz), u32(sz), u16(nm.length), u16(0), u16(0), u16(0), u16(0), u32(0), u32(off))), nm);
+    off += lh.length + nm.length + sz;
+  });
+  const cdSize = central.reduce((n, p) => n + p.length, 0);
+  const end = new Uint8Array([0x50, 0x4b, 5, 6].concat(u16(0), u16(0), u16(files.length), u16(files.length),
+    u32(cdSize), u32(off), u16(0)));
+  return new Blob(parts.concat(central, [end]),
+    { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+}
+function xesc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+  .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, ""); }
+function colL(n) { let s = ""; n++; while (n > 0) { const m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = (n - m - 1) / 26; } return s; }
+function excelDate(iso) { return Math.round((Date.UTC(+iso.slice(0, 4), +iso.slice(5, 7) - 1, +iso.slice(8, 10)) -
+  Date.UTC(1899, 11, 30)) / 86400000); }
+/* style ids — must match XLSX_STYLES cellXfs order */
+const X = { def: 0, bold: 1, title: 2, head: 3, date: 4, hrs: 5, pct: 6, totN: 7, totH: 8, totP: 9,
+  wkDate: 10, wk: 11, wrap: 12, foot: 13, totL: 14, sub: 15, headR: 16, wkHrs: 17 };
+const XLSX_STYLES = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+  '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+  '<numFmts count="2"><numFmt numFmtId="164" formatCode="m/d/yyyy"/><numFmt numFmtId="165" formatCode="0.0%"/></numFmts>' +
+  '<fonts count="5"><font><sz val="11"/><name val="Calibri"/><family val="2"/></font>' +
+  '<font><b/><sz val="11"/><name val="Calibri"/><family val="2"/></font>' +
+  '<font><b/><sz val="15"/><color rgb="FFA3121B"/><name val="Calibri"/><family val="2"/></font>' +
+  '<font><i/><sz val="9"/><color rgb="FF666666"/><name val="Calibri"/><family val="2"/></font>' +
+  '<font><sz val="11"/><color rgb="FF555555"/><name val="Calibri"/><family val="2"/></font></fonts>' +
+  '<fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>' +
+  '<fill><patternFill patternType="solid"><fgColor rgb="FFF2E4E5"/><bgColor indexed="64"/></patternFill></fill>' +
+  '<fill><patternFill patternType="solid"><fgColor rgb="FFF3F3F3"/><bgColor indexed="64"/></patternFill></fill></fills>' +
+  '<borders count="3"><border><left/><right/><top/><bottom/><diagonal/></border>' +
+  '<border><left/><right/><top/><bottom style="thin"><color rgb="FF999999"/></bottom><diagonal/></border>' +
+  '<border><left/><right/><top style="thin"><color rgb="FF333333"/></top><bottom style="double"><color rgb="FF333333"/></bottom><diagonal/></border></borders>' +
+  '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="18">' +
+  '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +                                     // 0 def
+  '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>' +                       // 1 bold
+  '<xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/>' +                       // 2 title
+  '<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment wrapText="1" vertical="center"/></xf>' + // 3 head
+  '<xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" applyAlignment="1"><alignment horizontal="left"/></xf>' + // 4 date
+  '<xf numFmtId="2" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>' +              // 5 hrs
+  '<xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>' +            // 6 pct
+  '<xf numFmtId="1" fontId="1" fillId="0" borderId="2" xfId="0" applyNumberFormat="1" applyFont="1" applyBorder="1"/>' + // 7 totN
+  '<xf numFmtId="2" fontId="1" fillId="0" borderId="2" xfId="0" applyNumberFormat="1" applyFont="1" applyBorder="1"/>' + // 8 totH
+  '<xf numFmtId="165" fontId="1" fillId="0" borderId="2" xfId="0" applyNumberFormat="1" applyFont="1" applyBorder="1"/>' + // 9 totP
+  '<xf numFmtId="164" fontId="4" fillId="3" borderId="0" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyAlignment="1"><alignment horizontal="left"/></xf>' + // 10 wkDate
+  '<xf numFmtId="0" fontId="4" fillId="3" borderId="0" xfId="0" applyFont="1" applyFill="1"/>' +       // 11 wk
+  '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment wrapText="1" vertical="top"/></xf>' + // 12 wrap
+  '<xf numFmtId="0" fontId="3" fillId="0" borderId="0" xfId="0" applyFont="1"/>' +                       // 13 foot
+  '<xf numFmtId="0" fontId="1" fillId="0" borderId="2" xfId="0" applyFont="1" applyBorder="1"/>' +       // 14 totL
+  '<xf numFmtId="0" fontId="4" fillId="0" borderId="0" xfId="0" applyFont="1"/>' +                       // 15 sub
+  '<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="right" wrapText="1" vertical="center"/></xf>' + // 16 headR
+  '<xf numFmtId="2" fontId="4" fillId="3" borderId="0" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1"/>' + // 17 wkHrs
+  '</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>' +
+  "</styleSheet>";
+
+/* cell helpers: s = string, n = number, f = formula (with cached value) */
+const xs = (v, st) => ({ t: "s", v: v, s: st || 0 });
+const xn = (v, st) => ({ t: "n", v: v, s: st || 0 });
+const xf = (f, v, st) => ({ t: "f", f: f, v: v, s: st || 0 });
+function sheetXML(sh) {
+  let x = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
+    'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">';
+  x += '<sheetPr><pageSetUpPr fitToPage="1"/></sheetPr>';
+  x += '<sheetViews><sheetView workbookViewId="0"' + (sh.first ? ' tabSelected="1"' : "") + ">" +
+    (sh.freeze ? '<pane ySplit="' + sh.freeze + '" topLeftCell="A' + (sh.freeze + 1) +
+      '" activePane="bottomLeft" state="frozen"/>' : "") + "</sheetView></sheetViews>";
+  x += '<sheetFormatPr defaultRowHeight="15"/>';
+  if (sh.cols) x += "<cols>" + sh.cols.map((w, i) => '<col min="' + (i + 1) + '" max="' + (i + 1) +
+    '" width="' + w + '" customWidth="1"/>').join("") + "</cols>";
+  x += "<sheetData>";
+  sh.rows.forEach((row, ri) => {
+    if (!row) return;
+    x += '<row r="' + (ri + 1) + '">';
+    row.forEach((c, ci) => {
+      if (c === null || c === undefined) return;
+      const ref = colL(ci) + (ri + 1);
+      if (c.t === "s") x += '<c r="' + ref + '" s="' + c.s + '" t="inlineStr"><is><t xml:space="preserve">' +
+        xesc(c.v) + "</t></is></c>";
+      else if (c.t === "n") x += '<c r="' + ref + '" s="' + c.s + '"><v>' + c.v + "</v></c>";
+      else if (c.t === "f") x += '<c r="' + ref + '" s="' + c.s + '"><f>' + xesc(c.f) + "</f><v>" +
+        (typeof c.v === "number" && isFinite(c.v) ? c.v : 0) + "</v></c>";
+    });
+    x += "</row>";
+  });
+  x += "</sheetData>";
+  if (sh.merges && sh.merges.length) x += '<mergeCells count="' + sh.merges.length + '">' +
+    sh.merges.map(m => '<mergeCell ref="' + m + '"/>').join("") + "</mergeCells>";
+  x += '<pageMargins left="0.5" right="0.5" top="0.6" bottom="0.6" header="0.3" footer="0.3"/>' +
+    '<pageSetup orientation="' + (sh.landscape ? "landscape" : "portrait") + '" fitToWidth="1" fitToHeight="0"/>';
+  return x + "</worksheet>";
+}
+function buildXlsx(sheets, title) {
+  const enc = new TextEncoder(), f = [];
+  const add = (n, s) => f.push({ name: n, data: enc.encode(s) });
+  add("[Content_Types].xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+    '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+    '<Default Extension="xml" ContentType="application/xml"/>' +
+    '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
+    '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' +
+    sheets.map((s, i) => '<Override PartName="/xl/worksheets/sheet' + (i + 1) +
+      '.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>').join("") +
+    '<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>' +
+    "</Types>");
+  add("_rels/.rels", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>' +
+    '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>' +
+    "</Relationships>");
+  add("docProps/core.xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" ' +
+    'xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" ' +
+    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>' + xesc(title) + "</dc:title>" +
+    "<dc:creator>" + xesc(S.settings.observerName || "Saks Admin Hub") + "</dc:creator>" +
+    '<dcterms:created xsi:type="dcterms:W3CDTF">' + new Date().toISOString().slice(0, 19) + "Z</dcterms:created>" +
+    "</cp:coreProperties>");
+  add("xl/workbook.xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
+    'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+    '<bookViews><workbookView activeTab="0"/></bookViews><sheets>' +
+    sheets.map((s, i) => '<sheet name="' + xesc(s.name) + '" sheetId="' + (i + 1) + '" r:id="rId' + (i + 1) + '"/>').join("") +
+    '</sheets><calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>');
+  add("xl/_rels/workbook.xml.rels", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+    sheets.map((s, i) => '<Relationship Id="rId' + (i + 1) +
+      '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet' +
+      (i + 1) + '.xml"/>').join("") +
+    '<Relationship Id="rId' + (sheets.length + 1) +
+    '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>' +
+    "</Relationships>");
+  add("xl/styles.xml", XLSX_STYLES);
+  sheets.forEach((s, i) => add("xl/worksheets/sheet" + (i + 1) + ".xml", sheetXML(s)));
+  return zipStore(f);
+}
+
+/* The monthly workbook: Summary, Daily, Entries. */
+function monthWorkbook(key) {
+  const list = monthEntries(key).slice().sort((a, b) =>
+    a.date.localeCompare(b.date) || (a.createdAt || "").localeCompare(b.createdAt || ""));
+  const t = totalsOf(list), days = daysInMonth(key), mName = monthName(key);
+  const who = S.settings.observerName || "", school = S.settings.school || SCHOOL_NAME;
+  const NC = TIME_CATS.length;                       // 7 category columns: C..I
+  const totCol = colL(2 + NC), aftCol = colL(3 + NC); // J, K
+
+  /* ---- Daily ---- */
+  const D0 = 4, DN = D0 + days.length - 1;           // first/last data row (1-based)
+  const daily = { name: "Daily", freeze: 3, landscape: true,
+    cols: [12, 6].concat(TIME_CATS.map(() => 14.5), [9, 11]), rows: [] };
+  daily.rows[0] = [xs("Daily minutes by category — " + mName, X.title)];
+  daily.rows[1] = [xs(school + (who ? " · " + who : "") + " · minutes, entered daily", X.sub)];
+  daily.rows[2] = [xs("Date", X.head), xs("Day", X.head)].concat(TIME_CATS.map(c => xs(c.name, X.headR)),
+    [xs("Total", X.headR), xs("After hours", X.headR)]);
+  days.forEach((d, i) => {
+    const r = D0 + i, we = isWeekend(d), dt = totalsOf(list.filter(e => e.date === d));
+    daily.rows[r - 1] = [xn(excelDate(d), we ? X.wkDate : X.date),
+      xs(new Date(d + "T12:00:00").toLocaleDateString("en-US", { weekday: "short" }), we ? X.wk : X.def)]
+      .concat(TIME_CATS.map(c => dt[c.key] ? xn(dt[c.key], we ? X.wk : X.def) : (we ? xs("", X.wk) : null)),
+        [xf("SUM(C" + r + ":" + colL(1 + NC) + r + ")", dt.all, we ? X.wk : X.bold),
+         dt.after ? xn(dt.after, we ? X.wk : X.def) : (we ? xs("", X.wk) : null)]);
+  });
+  const DT = DN + 1;
+  daily.rows[DT - 1] = [xs("Total minutes", X.totL), xs("", X.totL)].concat(
+    TIME_CATS.map((c, i) => xf("SUM(" + colL(2 + i) + D0 + ":" + colL(2 + i) + DN + ")", t[c.key], X.totN)),
+    [xf("SUM(" + totCol + D0 + ":" + totCol + DN + ")", t.all, X.totN),
+     xf("SUM(" + aftCol + D0 + ":" + aftCol + DN + ")", t.after, X.totN)]);
+  daily.rows[DT] = [xs("Total hours", X.bold), null].concat(
+    TIME_CATS.map((c, i) => xf(colL(2 + i) + DT + "/60", t[c.key] / 60, X.hrs)),
+    [xf(totCol + DT + "/60", t.all / 60, X.hrs), xf(aftCol + DT + "/60", t.after / 60, X.hrs)]);
+  daily.rows[DT + 2] = [xs("Shaded rows are weekends. Blank means nothing was logged.", X.foot)];
+
+  /* ---- Entries ---- */
+  const entries = { name: "Entries", freeze: 1, landscape: true,
+    cols: [12, 6, 20, 9, 8, 11, 17, 60], rows: [] };
+  entries.rows[0] = ["Date", "Day", "Category", "Minutes", "Hours", "After hours", "Source", "Note"]
+    .map((h, i) => xs(h, i === 3 || i === 4 ? X.headR : X.head));
+  list.forEach((e, i) => {
+    const r = i + 2;
+    entries.rows[r - 1] = [xn(excelDate(e.date), X.date),
+      xs(new Date(e.date + "T12:00:00").toLocaleDateString("en-US", { weekday: "short" })),
+      xs(CAT[e.category] ? CAT[e.category].name : e.category), xn(e.minutes),
+      xf("D" + r + "/60", e.minutes / 60, X.hrs), xs(e.afterHours ? "Yes" : "No"),
+      xs(e.source === "atot" ? "ATOT walkthrough" : "Manual"), xs(e.note || "", X.wrap)];
+  });
+  const EN = list.length + 1;
+  entries.rows[EN] = [xs("Total", X.totL), xs("", X.totL), xs("", X.totL),
+    xf("SUM(D2:D" + Math.max(2, EN) + ")", t.all, X.totN), xf("D" + (EN + 1) + "/60", t.all / 60, X.totH),
+    xs("", X.totL), xs("", X.totL), xs("", X.totL)];
+
+  /* ---- Summary ---- */
+  const sum = { name: "Summary", first: true, cols: [42, 11, 10, 11, 50], rows: [] };
+  sum.rows[0] = [xs("Principal Time Report — " + mName, X.title)];
+  sum.rows[1] = [xs(school + " · " + (S.settings.district || DISTRICT_NAME), X.sub)];
+  sum.rows[2] = [xs("Principal: " + (who || "________________"), X.sub)];
+  sum.rows[4] = [xs("Category", X.head), xs("Minutes", X.headR), xs("Hours", X.headR), xs("% of time", X.headR)];
+  const S0 = 6, SN = S0 + NC - 1, ST = SN + 1;
+  TIME_CATS.forEach((c, i) => {
+    const r = S0 + i, col = colL(2 + i);
+    sum.rows[r - 1] = [xs(c.name), xf("Daily!" + col + DT, t[c.key]), xf("B" + r + "/60", t[c.key] / 60, X.hrs),
+      xf("IF($B$" + ST + "=0,0,B" + r + "/$B$" + ST + ")", t.all ? t[c.key] / t.all : 0, X.pct)];
+  });
+  sum.rows[ST - 1] = [xs("Total", X.totL), xf("SUM(B" + S0 + ":B" + SN + ")", t.all, X.totN),
+    xf("B" + ST + "/60", t.all / 60, X.totH), xf("IF(B" + ST + "=0,0,SUM(D" + S0 + ":D" + SN + "))", t.all ? 1 : 0, X.totP)];
+  const atot = list.filter(e => e.source === "atot").reduce((n, e) => n + e.minutes, 0);
+  const nDays = new Set(list.map(e => e.date)).size;
+  let r = ST + 2;
+  sum.rows[r - 1] = [xs("Days with time logged"),
+    xf("COUNTIF(Daily!" + totCol + D0 + ":" + totCol + DN + ',">0")', nDays)]; r++;
+  sum.rows[r - 1] = [xs("After-hours / event time"), xf("Daily!" + aftCol + DT, t.after),
+    xf("B" + r + "/60", t.after / 60, X.hrs)]; r++;
+  sum.rows[r - 1] = [xs("Walkthrough time (in Instructional Leader)"),
+    xf('SUMIF(Entries!G2:G' + Math.max(2, EN) + ',"ATOT walkthrough",Entries!D2:D' + Math.max(2, EN) + ")", atot),
+    xf("B" + r + "/60", atot / 60, X.hrs)]; r++;
+  const others = list.filter(e => e.category === "other");
+  r++;
+  sum.rows[r - 1] = [xs("What “Other” was", X.head), xs("Minutes", X.headR), xs("", X.head), xs("", X.head), xs("Note", X.head)]; r++;
+  if (!others.length) { sum.rows[r - 1] = [xs("No Other time this month.", X.sub)]; r++; }
+  others.forEach(e => {
+    sum.rows[r - 1] = [xn(excelDate(e.date), X.date), xn(e.minutes), null, null, xs(e.note || "", X.wrap)]; r++;
+  });
+  r++;
+  sum.rows[r - 1] = [xs("Minutes are entered by the principal each day. Walkthrough minutes come from the " +
+    "ATOT visit timer and are counted as Instructional Leader.", X.foot)];
+  sum.rows[r] = [xs("Generated " + new Date().toLocaleDateString("en-US") + " by Saks Admin Hub.", X.foot)];
+
+  return buildXlsx([sum, daily, entries], "Principal Time Report — " + mName);
+}
+async function exportMonth(share) {
+  const key = monthKey || todayISO().slice(0, 7);
+  if (!monthEntries(key).length) return toast("Nothing logged this month");
+  const name = "Saks Principal Time " + key + ".xlsx";
+  const blob = monthWorkbook(key);
+  if (share && navigator.canShare) {
+    const file = new File([blob], name, { type: blob.type });
+    if (navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: "Principal time — " + monthName(key) }); return; }
+      catch (e) { if (e && e.name === "AbortError") return; }
+    }
+  }
+  const u = URL.createObjectURL(blob), a = document.createElement("a");
+  a.href = u; a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(u); a.remove(); }, 1500);
+  toast("Excel file downloaded");
+}
+
+/* ==============================================================
+   VIEW: MORE / SETTINGS
+   ============================================================== */
+function viewMore() {
+  setHeader("More", "Setup and data");
+  const s = S.settings;
+  let h = '<div class="sect">You</div><div class="card">' +
+    '<label class="f"><span>Your name (on every observation and on the monthly time report)</span><input type="text" id="m_obs" value="' +
+      esc(s.observerName || "") + '" onchange="setSetting(\'observerName\',this.value)"></label>' +
+    '<label class="f"><span>School</span><input type="text" id="m_sch" value="' + esc(s.school || "") +
+      '" onchange="setSetting(\'school\',this.value)"></label>' +
+    '<label class="f" style="margin-bottom:0"><span>System / district</span><input type="text" value="' +
+      esc(s.district || "") + '" onchange="setSetting(\'district\',this.value)"></label></div>';
+
+  h += '<div class="sect">Time log</div><div class="card">' +
+    '<div class="ck ' + (s.atotCountsAsTime ? "yes" : "") + '" onclick="setSetting(\'atotCountsAsTime\',!' +
+      (s.atotCountsAsTime ? "true" : "false") + ');viewMore()"><div class="bx">✓</div>' +
+      '<div class="tx">Count finished walkthroughs as <b>Instructional Leader</b> time</div></div>' +
+    '<label class="f" style="margin:12px 0 0"><span>Master schedule — which half is running</span>' +
+      '<select onchange="setSetting(\'scheduleHalf\',this.value)">' +
+      [["auto", "Automatic (first half Jul–Dec, second half Jan–Jun)"], ["1", "First half"], ["2", "Second half"]]
+        .map(o => '<option value="' + o[0] + '"' + (s.scheduleHalf === o[0] ? " selected" : "") + ">" + o[1] + "</option>").join("") +
+      "</select></label></div>";
+
+  h += '<div class="card tap" onclick="location.hash=\'#/staff\'"><div class="row between">' +
+    '<div class="grow"><div style="font-weight:650">Staff roster</div><div class="tiny muted">' +
+    S.staff.filter(t => t.status !== "inactive").length + " active · edit names, rooms, or reload the master schedule</div></div>" +
+    '<div style="font-size:19px;color:var(--brand)">›</div></div></div>';
+
+  h += '<div class="sect">Google Sheet</div>' +
+    '<div class="card tap" onclick="location.hash=\'#/sheet\'"><div class="row between">' +
+    '<div class="grow"><div style="font-weight:650">' + (s.sheetUrl || s.timeSheetUrl ? "Connected" : "Not connected") + "</div>" +
+    '<div class="tiny muted">' + (s.sheetUrl ? "Last sent " + (s.lastSync ? agoLabel(s.lastSync) : "never") :
+      "Set up automatic roll-up") + "</div></div>" +
+    '<div style="font-size:19px;color:var(--brand)">›</div></div></div>';
+
+  h += '<div class="sect">Sections shown during capture</div><div class="card">' +
+    [["actions", "Teacher / student action tallies"], ["room", "Room environment"],
+     ["systems", "Systems & routines"], ["safety", "Safety & compliance"]].map(x =>
+      '<div class="ck ' + (s.sections[x[0]] !== false ? "yes" : "") + '" onclick="toggleSection(\'' + x[0] + '\')">' +
+      '<div class="bx">✓</div><div class="tx">' + esc(x[1]) + "</div></div>").join("") + "</div>";
+
+  h += '<div class="sect">Data</div><div class="card">' +
+    '<div class="btnrow" style="margin-bottom:8px">' +
+    '<button class="btn" onclick="exportCSV()">Export CSV</button>' +
+    '<button class="btn" onclick="exportJSON()">Backup</button></div>' +
+    '<button class="btn full" onclick="document.getElementById(\'imp\').click()">Restore backup</button>' +
+    '<input type="file" id="imp" accept="application/json,.json" style="display:none" onchange="importJSON(this)">' +
+    "</div>";
+
+  h += '<div class="sect">Guide</div>' +
+    '<div class="card tap" onclick="openGuide()"><div class="row between">' +
+    '<div class="grow"><div style="font-weight:650">Guide &amp; framework reference</div>' +
+    '<div class="tiny muted">ATOT: all 23 indicators, the rating scale, and FAQ</div></div>' +
+    '<div style="font-size:19px;color:var(--brand)">↗</div></div></div>';
+
+  h += '<div class="sect">Install</div><div class="card">' +
+    '<div class="tiny" style="background:var(--bg);padding:11px;border-radius:9px;line-height:1.6">' +
+    "<b>iPhone:</b> Share → Add to Home Screen<br><b>Android:</b> ⋮ → Install app<br>" +
+    "<b>Desktop:</b> install icon in the address bar</div><div id=\"islot\"></div></div>";
+
+  h += '<div class="sect">About the framework</div><div class="card">' +
+    '<p class="tiny muted" style="margin:0 0 9px;line-height:1.55">This app follows the Alabama Teacher ' +
+    'Observation Tool — five dimensions, 23 indicators, rated 1 to 4. It is a capture tool for frequent ' +
+    'walkthroughs. Official ATGP observations are still entered in the state ATOT platform; what you ' +
+    'collect here is the evidence that makes that entry fast.</p>' +
+    '<p class="tiny muted" style="margin:0 0 9px;line-height:1.55">Observation records describe adults. The app ' +
+    'blocks student-identifying information on entry.</p>' +
+    '<p class="mini muted" style="margin:0;line-height:1.55;padding-top:9px;border-top:1px solid var(--line)">' +
+    'A locally built tool aligned to ATOT. Not affiliated with, produced by, or endorsed by the ' +
+    'Alabama State Department of Education. Questions about the state program go to ATGP@alsde.edu.</p></div>';
+
+  h += '<div class="card"><button class="btn dan full" onclick="wipeAll()">Erase everything on this device</button></div>';
+  h += '<p class="mini muted" style="text-align:center;margin:18px 0 6px">Saks Admin Hub v1 · ATOT ' +
+    INDICATORS.length + " indicators · " + TIME_CATS.length + " time categories</p>";
+  document.getElementById("app").innerHTML = h;
+  if (deferredPrompt) document.getElementById("islot").innerHTML =
+    '<button class="btn pri full" style="margin-top:9px" onclick="doInstall()">Install app</button>';
+}
+async function setSetting(k, v) { S.settings[k] = v; await saveSettings(); toast("Saved"); }
+async function toggleSection(k) {
+  S.settings.sections[k] = S.settings.sections[k] === false;
+  await saveSettings(); viewMore();
+}
+function viewSheetSetup() {
+  setHeader("Google Sheet", "Automatic backup and roll-up", backBtn);
+  const s = S.settings;
+  let h = '<div class="card"><p class="tiny muted" style="margin:0 0 11px;line-height:1.6">' +
+    "Every observation becomes a row on the <b>Observations</b> tab, and every time entry a row on the " +
+    "<b>Time Log</b> tab, in a Sheet you own. Set up once, about three minutes. Everything saves on the " +
+    "phone first and goes to the Sheet when there is signal. The Sheet is your backup; the monthly Excel " +
+    "report comes from the Time tab.</p>" +
+    '<div class="tiny" style="background:var(--bg);padding:12px;border-radius:9px;line-height:1.85">' +
+    "<b>1.</b> Create a new Google Sheet.<br>" +
+    "<b>2.</b> Extensions → Apps Script.<br>" +
+    "<b>3.</b> Delete what is there, paste in the <code>Code.gs</code> file that came with this app, and save.<br>" +
+    "<b>4.</b> Deploy → New deployment → type <b>Web app</b>.<br>" +
+    "<b>5.</b> Execute as <b>Me</b>. Who has access: <b>Anyone</b>.<br>" +
+    "<b>6.</b> Authorize when prompted, then copy the Web app URL.<br>" +
+    "<b>7.</b> Paste it below and tap Test." +
+    "</div></div>";
+  h += '<div class="card">' +
+    '<label class="f"><span>Web app URL</span><input type="url" id="sh_url" value="' + esc(s.sheetUrl || "") +
+      '" placeholder="https://script.google.com/macros/s/…/exec"></label>' +
+    '<label class="f"><span>Time log Sheet URL — optional</span><input type="url" id="sh_turl" value="' +
+      esc(s.timeSheetUrl || "") + '" placeholder="leave blank to use the same Sheet"></label>' +
+    '<p class="mini muted" style="margin:-6px 0 12px;line-height:1.5">Walkthrough rows name teachers; the time log ' +
+      "is about you. If they will be shared with different people, give the time log its own Sheet with its own " +
+      "copy of <code>Code.gs</code>.</p>" +
+    '<label class="f"><span>Shared secret — only if you set one in Code.gs</span>' +
+      '<input type="text" id="sh_secret" value="' + esc(s.sheetSecret || "") +
+      '" placeholder="leave blank if SHARED_SECRET is empty"></label>' +
+    '<div class="btnrow"><button class="btn" onclick="testSheet()">Test</button>' +
+    '<button class="btn pri" onclick="saveSheetUrl()">Save</button></div></div>';
+  h += '<div class="card"><div class="ck ' + (s.autoSync ? "yes" : "") + '" onclick="setSetting(\'autoSync\',!' +
+    (s.autoSync ? "true" : "false") + ');viewSheetSetup()"><div class="bx">✓</div>' +
+    '<div class="tx">Send automatically when something is saved and when the connection returns</div></div></div>';
+  const p = pendingCount();
+  h += '<div class="card"><div class="row between"><div class="tiny">' +
+    (p ? p + " item(s) waiting" : "Nothing waiting to send") + "</div>" +
+    '<button class="btn sm" onclick="syncNow(true)">Send now</button></div></div>';
+  h += '<div class="card"><p class="mini muted" style="margin:0;line-height:1.6">Anything sent to the Sheet ' +
+    "lives under your Google account and your system's rules, not this app's. Observation rows name teachers, " +
+    "so treat the Sheet as a personnel record: restrict sharing, and check your system's evaluation and " +
+    "bargaining rules before giving anyone else access.</p></div>";
+  document.getElementById("app").innerHTML = h;
+}
+async function saveSheetUrl() {
+  const u = val("sh_url");
+  if (u && !/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec/.test(u))
+    return toast("That does not look like an Apps Script /exec URL");
+  const tu = val("sh_turl");
+  if (tu && !/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec/.test(tu))
+    return toast("The time log URL does not look like an Apps Script /exec URL");
+  S.settings.sheetUrl = u; S.settings.timeSheetUrl = tu; S.settings.sheetSecret = val("sh_secret");
+  await saveSettings();
+  toast(u || tu ? "Saved" : "Disconnected"); route();
+}
+async function testSheet() {
+  const u = val("sh_url");
+  if (!u) return toast("Paste the URL first");
+  toast("Testing…");
+  try {
+    const res = await fetch(u, { method: "POST", redirect: "follow",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ token: "walkthrough-v1", secret: val("sh_secret"), test: true }) });
+    const t = await res.text();
+    let j = null; try { j = JSON.parse(t); } catch (e) {}
+    if (j && j.status === "ok") {
+      S.settings.sheetUrl = u; S.settings.sheetSecret = val("sh_secret");
+      await saveSettings();
+      sheet("Connected", '<p class="tiny muted" style="margin:0 0 13px">Your Sheet answered. ' +
+        esc(j.message || "") + '</p><button class="btn pri full" onclick="closeSheet();syncNow(true)">' +
+        "Send any waiting visits</button>");
+    } else {
+      sheet("Could not connect", '<div class="warnbox"><h4>The Sheet did not answer as expected</h4>' +
+        '<div class="tiny" style="margin-top:6px">' + esc((t || "").slice(0, 300)) + "</div></div>" +
+        '<p class="tiny muted" style="margin:0 0 12px">Most common cause: the deployment is not set to ' +
+        '<b>Execute as Me</b> and <b>Anyone</b> has access. Redeploy and try again.</p>' +
+        '<button class="btn full" onclick="closeSheet()">Close</button>');
+    }
+  } catch (e) {
+    sheet("Could not connect", '<div class="warnbox"><h4>Request failed</h4>' +
+      '<div class="tiny" style="margin-top:6px">' + esc(e.message) + "</div></div>" +
+      '<p class="tiny muted" style="margin:0 0 12px">Check the URL ends in <code>/exec</code>, and that ' +
+      "you are online.</p><button class='btn full' onclick='closeSheet()'>Close</button>");
+  }
+}
+
+/* ---------- export ---------- */
+function download(name, text, mime) {
+  const b = new Blob([text], { type: mime || "text/plain;charset=utf-8" });
+  const u = URL.createObjectURL(b);
+  const a = document.createElement("a");
+  a.href = u; a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(u); a.remove(); }, 400);
+}
+function csvCell(v) {
+  const s = v === null || v === undefined ? "" : String(v);
+  return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+function exportCSV() {
+  if (!S.visits.length) return toast("No visits to export");
+  const rows = [sheetHeader()].concat(
+    S.visits.slice().sort((a, b) => (a.createdAt || "").localeCompare(b.createdAt || "")).map(sheetRow));
+  download("saks-walkthroughs-" + todayISO() + ".csv",
+    rows.map(r => r.map(csvCell).join(",")).join("\n"), "text/csv;charset=utf-8");
+  toast("CSV downloaded");
+}
+function exportJSON() {
+  download("admin-hub-backup-" + todayISO() + ".json",
+    JSON.stringify({ app: "adminhub", version: 1, exportedAt: now(),
+      staff: S.staff, visits: S.visits, time: S.time, settings: S.settings }, null, 2), "application/json");
+  toast("Backup downloaded");
+}
+function importJSON(input) {
+  const f = input.files && input.files[0]; input.value = "";
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    let d; try { d = JSON.parse(r.result); } catch (e) { return toast("Not a readable backup"); }
+    if (!d || (d.app !== "adminhub" && d.app !== "walkthrough")) return toast("Not an Admin Hub or ATOT backup");
+    confirmSheet("Restore this backup?", "Everything on this device is replaced.", "Replace", async () => {
+      for (const s of STORES) await dbClear(s);
+      for (const t of d.staff || []) await dbPut("staff", t);
+      for (const v of d.visits || []) await dbPut("visits", v);
+      for (const e of d.time || []) await dbPut("time", e);
+      await dbPut("meta", { id: "rosterSeeded", at: now() });
+      if (d.settings) { d.settings.id = "settings"; await dbPut("meta", d.settings); }
+      await loadAll(); toast("Restored"); location.hash = "#/home"; route();
+    });
+  };
+  r.readAsText(f);
+}
+function wipeAll() {
+  confirmSheet("Erase everything?", "All staff, observations, and time entries on this device are deleted. Rows already " +
+    "in your Google Sheet stay there.", "Erase", async () => {
+      for (const s of STORES) await dbClear(s);
+      S.staff = []; S.visits = []; S.time = []; S.draft = null; S.settings = defaultSettings();
+      S.tomb = { id: "timeTombstones", ids: [] };
+      await dbPut("meta", S.settings); await dbPut("meta", { id: "rosterSeeded", at: now() });
+      toast("Erased"); location.hash = "#/home"; route();
+    });
+}
+
+/* ---------- install + SW + boot ---------- */
+let deferredPrompt = null;
+window.addEventListener("beforeinstallprompt", e => {
+  e.preventDefault(); deferredPrompt = e;
+  if (location.hash === "#/more") viewMore();
+});
+/* The guide is a plain page hosted next to the app. Opening it in a new tab
+   keeps the installed app window on whatever the principal was doing. */
+function openGuide() {
+  const url = new URL("guide.html", location.href).href;
+  const w = window.open(url, "_blank", "noopener");
+  if (!w) location.href = url;          // popup blocked — navigate instead
+}
+async function doInstall() {
+  if (!deferredPrompt) return toast("Use your browser's Add to Home Screen");
+  deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; viewMore();
+}
+if ("serviceWorker" in navigator && location.protocol !== "file:")
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+window.addEventListener("hashchange", route);
+document.addEventListener("visibilitychange", () => { if (document.hidden && S.draft) saveDraft(); });
+
+(async function boot() {
+  await openDB();
+  await loadAll();
+  if (!location.hash) location.hash = "#/home";
+  route();
+  if (S.settings.autoSync && S.settings.sheetUrl && navigator.onLine) setTimeout(() => syncNow(false), 900);
+})();
+</script>
+</body>
+</html>

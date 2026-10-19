@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#7a1a2a">
+<meta name="description" content="ATOT Walkthrough — how to install it, how the framework works, and where the data goes.">
+<title>ATOT Walkthrough — Guide</title>
+<!-- ============================================================
+     FRONT DOOR PAGE
+     Drop this next to index.html. Nothing else needs to change.
+     Live at:  <your-site>/ATOT/guide.html
+
+     Set the two links below, then never touch this file again.
+     ============================================================ -->
+<style>
+:root{
+  --bg:#f5f4f2; --card:#ffffff; --ink:#16181d; --muted:#5f636c; --faint:#8d929c;
+  --brand:#7a1a2a; --brand-ink:#7a1a2a; --brand-soft:#f7ebed; --line:#e5e4e1;
+  --accent:#2a78d6; --good:#0f766e; --warn:#b45309; --warn-soft:#fdf3e3;
+  --shadow:0 1px 2px rgba(16,18,29,.06),0 4px 16px rgba(16,18,29,.06);
+  --radius:14px; --safe-t:env(safe-area-inset-top,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0f1115; --card:#191c22; --ink:#e9eaee; --muted:#9aa0aa; --faint:#6d737d;
+    --brand:#c2586c; --brand-ink:#4d1019; --brand-soft:#2a1a1f; --line:#282c34;
+    --accent:#6aa3e0; --good:#4fc0ae; --warn:#e0a458; --warn-soft:#33260f;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.28);
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3{margin:0;letter-spacing:-.02em;font-weight:680}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 18px}
+
+/* hero */
+header{background:var(--brand-ink);color:#fff;padding:calc(var(--safe-t) + 42px) 0 38px;
+  text-align:center}
+header h1{font-size:clamp(27px,7vw,38px);margin-bottom:9px}
+header p{margin:0 auto;max-width:30rem;color:rgba(255,255,255,.82);font-size:16px}
+header .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.6);font-weight:700;margin-bottom:11px}
+
+/* nav */
+nav.jump{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+nav.jump::-webkit-scrollbar{display:none}
+nav.jump ul{display:flex;gap:4px;list-style:none;margin:0;padding:9px 18px;max-width:720px;
+  margin-inline:auto;min-width:max-content}
+nav.jump a{display:block;padding:6px 12px;border-radius:99px;font-size:13.5px;font-weight:600;
+  color:var(--muted);text-decoration:none;white-space:nowrap}
+nav.jump a:hover{background:var(--card);color:var(--ink)}
+
+section{padding:34px 0 8px}
+section > h2{font-size:22px;margin-bottom:6px}
+section > .lede{color:var(--muted);margin:0 0 18px;font-size:15px}
+
+.btns{display:flex;flex-direction:column;gap:10px;margin:26px auto 0;max-width:24rem}
+@media(min-width:560px){.btns{flex-direction:row}}
+.btn{flex:1;display:block;padding:15px 20px;border-radius:12px;text-align:center;
+  font-weight:670;font-size:16px;text-decoration:none;border:1.5px solid transparent}
+.btn.primary{background:#fff;color:var(--brand-ink)}
+.btn.ghost{border-color:rgba(255,255,255,.35);color:#fff}
+.btn.primary:active,.btn.ghost:active{transform:scale(.99)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px;box-shadow:var(--shadow);margin-bottom:12px}
+.card h3{font-size:16px;margin-bottom:7px}
+.card p:last-child{margin-bottom:0}
+.card p{margin:0 0 10px;font-size:15px}
+
+.steps{display:grid;gap:12px}
+@media(min-width:620px){.steps{grid-template-columns:repeat(3,1fr)}}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px;box-shadow:var(--shadow)}
+.step .dev{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--brand);margin-bottom:8px}
+.step ol{margin:0;padding-left:19px;font-size:14.5px;line-height:1.65}
+
+details{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  margin-bottom:9px;box-shadow:var(--shadow);overflow:hidden}
+details summary{padding:15px 18px;cursor:pointer;font-weight:650;font-size:15.5px;
+  list-style:none;display:flex;align-items:center;gap:10px}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"+";margin-left:auto;color:var(--faint);font-size:19px;
+  font-weight:400;line-height:1}
+details[open] summary::after{content:"–"}
+details summary:hover{background:var(--brand-soft)}
+details .body{padding:0 18px 16px;font-size:15px}
+details .body p:first-child{margin-top:0;color:var(--muted);font-size:14.5px}
+details ul{margin:10px 0 0;padding-left:19px;line-height:1.7}
+details li{margin-bottom:3px}
+.code{display:inline-block;background:var(--brand-soft);color:var(--brand);
+  padding:1px 7px;border-radius:6px;font-size:13px;font-weight:700;
+  font-family:ui-monospace,Menlo,Consolas,monospace;margin-right:6px}
+
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin:4px 0 0}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);font-weight:700}
+td.n{font-weight:700;width:2.6rem;color:var(--brand)}
+
+.note{background:var(--warn-soft);border:1px solid color-mix(in srgb,var(--warn) 28%,transparent);
+  border-radius:var(--radius);padding:15px 17px;font-size:14.5px;line-height:1.6;margin-bottom:12px}
+.note b{color:var(--warn)}
+
+footer{margin-top:40px;padding:26px 0 40px;border-top:1px solid var(--line);
+  color:var(--faint);font-size:13px;line-height:1.65}
+footer a{color:var(--muted)}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">Classroom Observation</div>
+    <h1>ATOT Walkthrough</h1>
+    <p>Five dimensions, 23 indicators, the state's four-point scale — on your phone, in the
+       room, with or without a signal.</p>
+    <div class="btns">
+      <a class="btn primary" id="appBtn" href="./">Open the app</a>
+      <a class="btn ghost" id="formBtn" href="#">Use the Google Form</a>
+    </div>
+  </div>
+</header>
+
+<nav class="jump"><ul>
+  <li><a href="#install">Install it</a></li>
+  <li><a href="#how">How a visit works</a></li>
+  <li><a href="#framework">The framework</a></li>
+  <li><a href="#beyond">Room &amp; systems</a></li>
+  <li><a href="#questions">Questions</a></li>
+</ul></nav>
+
+<main class="wrap">
+
+<section id="install">
+  <h2>Install it — about twenty seconds</h2>
+  <p class="lede">Do this once. After that it opens instantly from your home screen and works
+     in classrooms with no signal.</p>
+  <div class="steps">
+    <div class="step"><div class="dev">iPhone / iPad</div>
+      <ol><li>Open the app link in <b>Safari</b></li><li>Tap the Share button</li>
+          <li>Tap <b>Add to Home Screen</b></li></ol></div>
+    <div class="step"><div class="dev">Android</div>
+      <ol><li>Open the app link in <b>Chrome</b></li><li>Tap the ⋮ menu</li>
+          <li>Tap <b>Install app</b></li></ol></div>
+    <div class="step"><div class="dev">Laptop</div>
+      <ol><li>Open the link in Chrome or Edge</li><li>Click the install icon in the address bar</li>
+          <li>It opens in its own window</li></ol></div>
+  </div>
+  <div class="note" style="margin-top:14px">
+    <b>Lost signal mid-observation?</b> Nothing happens. The app saves to your phone first,
+    finishes the walkthrough normally, and sends itself the next time you have a connection.
+    The home screen tells you if anything is still waiting.
+  </div>
+</section>
+
+<section id="how">
+  <h2>How a visit works</h2>
+  <p class="lede">Tap a name, pick your mode, and go. Nothing is required — rate what you saw.</p>
+
+  <div class="card">
+    <h3>Two modes</h3>
+    <p><b>Walkthrough (3–5 min)</b> — choose one or two focus dimensions and only those
+       indicators appear. Your choice is remembered, so if the building focus this month is
+       Agency, every walkthrough opens there.</p>
+    <p><b>Full ATOT (20 min)</b> — all five dimensions, all 23 indicators.</p>
+  </div>
+
+  <div class="card">
+    <h3>The seven sections</h3>
+    <p><b>ATOT</b> — tap a dimension, then 1–4 on each indicator, or <b>—</b> for not observed.</p>
+    <p><b>Actions</b> — teacher on the left, students on the right. Tap what you see, tap again
+       to count it twice. A live engagement percentage appears as you go — the fastest read on
+       who is doing the cognitive work.</p>
+    <p><b>Room, Systems, Safety</b> — tap once for yes, twice for no, three times to clear.</p>
+    <p><b>Notes</b> — timestamped against the visit clock.</p>
+    <p><b>Wrap up</b> — shows your own highest and lowest ratings from this visit, then asks for
+       a strength, a growth area, and a next step.</p>
+  </div>
+
+  <div class="card">
+    <h3>Two things worth knowing</h3>
+    <p>Blank is never a zero. Anything you leave alone is recorded as "not observed" and left
+       out of the averages entirely.</p>
+    <p>Anything you mark <b>No</b> on the room, systems, or safety lists is collected into a
+       flagged list — so a burned-out projector and a blocked exit surface through the same
+       walkthrough instead of needing a separate process.</p>
+  </div>
+</section>
+
+<section id="framework">
+  <h2>The framework</h2>
+  <p class="lede">Tap a dimension to see its indicators.</p>
+
+  <div class="card">
+    <h3>The rating scale</h3>
+    <table>
+      <tr><th>Rating</th><th>Meaning</th><th>How much of the class</th></tr>
+      <tr><td class="n">4</td><td>Very Evident</td><td>more than 75% of learners</td></tr>
+      <tr><td class="n">3</td><td>Evident</td><td>51–74% of learners</td></tr>
+      <tr><td class="n">2</td><td>Somewhat Evident</td><td>25–50% of learners</td></tr>
+      <tr><td class="n">1</td><td>Not Evident</td><td>less than 25% of learners</td></tr>
+    </table>
+    <p style="margin-top:14px;font-size:14.5px;color:var(--muted)">ATOT also asks you to weigh
+      three factors on every indicator: <b>implementation</b> (done with quality and fidelity),
+      <b>authenticity</b> (embedded in the room's routine, not staged for the visit), and
+      <b>effect on learners</b> (did it change what students actually did). The app collapses
+      these into one rating for speed — hold all three in mind when you pick the number.</p>
+  </div>
+
+  <div id="dims"></div>
+</section>
+
+<section id="beyond">
+  <h2>Room &amp; systems</h2>
+  <p class="lede">What the app collects alongside the ATOT ratings.</p>
+  <div id="lists"></div>
+</section>
+
+<section id="questions">
+  <h2>Questions</h2>
+  <div id="faq"></div>
+</section>
+
+<footer class="wrap">
+  <p><b>A locally built tool aligned to the Alabama Teacher Observation Tool.</b> Not affiliated
+     with, produced by, or endorsed by the Alabama State Department of Education. Official ATGP
+     observations are still entered in the state ATOT platform — this is for the frequent
+     walkthroughs in between. Questions about the state program go to
+     <a href="mailto:ATGP@alsde.edu">ATGP@alsde.edu</a>.</p>
+  <p>Observation records describe adults. Do not enter student names, ID numbers, or anything
+     that identifies an individual learner — the app will stop you if you try.</p>
+</footer>
+
+<script>
+"use strict";
+/* ============================================================
+   CONFIG — set these two, then you are done.
+   ============================================================ */
+var APP_URL  = "./";     // the app sits next to this file; leave as "./"
+var FORM_URL = "";       // paste your Google Form link here, or leave "" to hide the button
+/* ========================================================== */
+
+var ATOT = [
+  { key:"CC", name:"Culture / Climate",
+    desc:"A learning environment in which each learner is cared for, is safe, has a sense of belonging, and feels secure to share thoughts.",
+    items:["Fosters an environment that embraces all learners",
+      "Treats each learner equitably",
+      "Encourages learners to share opinions without fear of negative comments",
+      "Creates enthusiasm for the learning at hand"] },
+  { key:"LR", name:"Learning",
+    desc:"Processes established to ensure learners have opportunities to demonstrate understanding of content and apply knowledge and skills.",
+    items:["Communicates clear explanations about activities or tasks",
+      "Implements lessons stimulating higher-order thinking skills",
+      "Delivers lessons relatable to learners or aligned to their interests",
+      "Monitors learners' understanding of content / skill acquisition",
+      "Adapts instruction and activities to meet individual learner needs",
+      "Provides learners purposeful feedback about progress and needs"] },
+  { key:"ES", name:"Essentials",
+    desc:"Core competencies of an effective teacher: presence and disposition, pedagogical knowledge, content knowledge, and management of the learning environment.",
+    items:["Delivers / facilitates the lesson with knowledge and confidence",
+      "Communicates and upholds high expectations for learner behaviors",
+      "Facilitates use of resources supporting learner needs",
+      "Implements instructional strategies actively engaging learners",
+      "Manages learning time efficiently and optimally"] },
+  { key:"AG", name:"Agency",
+    desc:"Actions that foster learners' ability to self-direct and self-regulate learning.",
+    items:["Empowers learners to be responsible for learning",
+      "Gives learners choices about learning activities and tasks",
+      "Provides assistance navigating and monitoring learning progress",
+      "Encourages learners to persevere with challenging activities and tasks",
+      "Builds learners' growth mindset and self-efficacy"] },
+  { key:"RL", name:"Relationships",
+    desc:"Actions that foster healthy, positive connections between the teacher and learners.",
+    items:["Promotes respectful and caring interactions toward and between learners",
+      "Cultivates learner cooperation, collaboration, and inclusivity",
+      "Preserves learners' dignity while attending to individual needs"] }
+];
+
+var LISTS = [
+  { name:"Room environment",
+    desc:"Ten things about the space itself.",
+    items:["Learning target or objective posted and visible",
+      "Agenda or lesson flow visible to students",
+      "Anchor charts / word wall current and referenced",
+      "Current student work displayed with standards evident",
+      "Materials accessible to students without teacher help",
+      "Seating arrangement supports the day's task",
+      "Clear sightlines — teacher can see all students",
+      "Traffic paths clear and uncluttered",
+      "Classroom library / resources organized and in use",
+      "Technology set up and functioning"] },
+  { name:"Systems &amp; routines",
+    desc:"How the room runs when nobody is thinking about it.",
+    items:["Entry routine established; class started promptly",
+      "Attention signal used and honored",
+      "Transitions efficient (under two minutes)",
+      "Materials distribution and collection routinized",
+      "Behavior expectations posted and referenced",
+      "Positive narration / specific praise used",
+      "Clear procedure for questions and help-seeking",
+      "Students know what to do when finished",
+      "Closure or exit routine evident",
+      "High time on task throughout the visit"] },
+  { name:"Safety &amp; compliance",
+    desc:"The things you would rather catch on a Tuesday than during an inspection.",
+    items:["Emergency procedures posted and current",
+      "Exits and egress paths clear",
+      "Safety equipment accessible and unobstructed",
+      "Required postings present",
+      "Substitute folder / plans accessible",
+      "Student information secured, not publicly displayed",
+      "Lighting and temperature appropriate",
+      "Furniture and equipment in safe condition",
+      "Cords and technology safely managed",
+      "Supervision appropriate for the activity"] }
+];
+
+var FAQ = [
+  ["Do I have to use the app? Can I just use the form?",
+   "Either is fine, and both land in the same spreadsheet. The app is faster and works without a signal. The form is a form."],
+  ["Do I have to rate all 23 indicators?",
+   "No. Rate what you actually saw. Anything left blank is recorded as \"not observed,\" never as a zero, and it is left out of the averages."],
+  ["Can I start a visit and finish it later?",
+   "Yes. Leave and come back — the app holds the unfinished observation and offers to resume it."],
+  ["What if I lose signal in the building?",
+   "Nothing is lost. The app saves to your phone first and sends when you are back in range."],
+  ["Can teachers see this?",
+   "Only what you choose to share. The app has a Share button that produces a clean summary you can paste into an email. Nothing reaches a teacher automatically."],
+  ["Should I write student names in the notes?",
+   "No, and the app will stop you. Describe what a student did — \"S1 explained her reasoning\" — not who they are."],
+  ["Does this replace the official ATOT observation?",
+   "No. Official ATGP observations are entered in the state ATOT platform. This is the clipboard for the frequent walkthroughs in between, using the same language so the formal entry is quick."],
+  ["Who do I ask about the state program?",
+   "That is separate from this tool — ATGP@alsde.edu."]
+];
+
+function esc(s){ return String(s==null?"":s)
+  .replace(/&(?![a-z]+;)/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function render(){
+  document.getElementById("appBtn").href = APP_URL;
+  var fb = document.getElementById("formBtn");
+  fb.href = FORM_URL || "#";
+  fb.classList.toggle("hidden", !FORM_URL);   // toggle, so re-rendering can reveal it again
+
+  document.getElementById("dims").innerHTML = ATOT.map(function(d,i){
+    return '<details><summary>' + esc(d.name) +
+      ' <span style="color:var(--faint);font-weight:500;font-size:13.5px">· ' +
+      d.items.length + ' indicators</span></summary><div class="body">' +
+      "<p>" + esc(d.desc) + "</p><ul>" +
+      d.items.map(function(t,k){
+        return '<li><span class="code">' + d.key + (k+1) + "</span>" + esc(t) + "</li>";
+      }).join("") + "</ul></div></details>";
+  }).join("");
+
+  document.getElementById("lists").innerHTML = LISTS.map(function(l){
+    return '<details><summary>' + l.name + "</summary><div class=\"body\"><p>" + l.desc +
+      "</p><ul>" + l.items.map(function(t){ return "<li>" + esc(t) + "</li>"; }).join("") +
+      "</ul></div></details>";
+  }).join("");
+
+  document.getElementById("faq").innerHTML = FAQ.map(function(q){
+    return "<details><summary>" + esc(q[0]) + '</summary><div class="body"><p style="color:var(--ink)">' +
+      esc(q[1]) + "</p></div></details>";
+  }).join("");
+}
+render();
+</script>
+</body>
+</html>
