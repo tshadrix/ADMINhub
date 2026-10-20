@@ -7,7 +7,7 @@
    app and the ATOT app can share the tshadrixccboe.github.io origin
    without wiping each other's offline copy. */
 const PREFIX = "adminhub-";
-const CACHE = PREFIX + "v1";
+const CACHE = PREFIX + "v2";
 const ASSETS = [
   "./", "./index.html", "./manifest.json", "./guide.html",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png", "./icons/saks-logo.png"
